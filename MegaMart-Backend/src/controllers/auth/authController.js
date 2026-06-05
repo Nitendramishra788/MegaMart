@@ -46,6 +46,52 @@ const signUp = async (req , res)=>{
 };
 
 
+// login user
+
+const login = async (req , res)=>{
+    const {email , password } = req.body;
+
+    try{
+        const user = await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({
+                success:false,
+                message:"invalid email or password"
+            })
+        };
+
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+       if(!isMatch){
+        return res.status(400).json({
+            success:false,
+            message:"invalid email or password"
+        })
+       };
+
+       res.status(200).json({
+        success:true,
+        message:"login successful",
+        token:generateToken(user._id),
+        user,
+       })
+}catch(err){
+    res.status(500).json({
+        success:false,
+        error:err.message
+    })
+}
+
+}
+
+
+
+
 module.exports = {
-    signUp
+    signUp,
+    login   
 }
