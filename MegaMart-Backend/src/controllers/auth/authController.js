@@ -89,9 +89,21 @@ const login = async (req , res)=>{
 }
 
 
+// get user profile
+const getMe = async (req, res) => {
+
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+
+};
+
+
 
 
 module.exports = {
     signUp,
-    login   
+    login,
+    getMe   
 }
