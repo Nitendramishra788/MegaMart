@@ -19,8 +19,12 @@ const updateProfile = async (req, res)=>{
         user.name = req.body.name || user.name;
         user.number = req.body.number || user.number;
         
-        if(user.avatar ){
-            user.avatar = req.body.avatar || user.avatar;
+        // if(user.avatar ){
+        //     user.avatar = req.body.avatar || user.avatar;
+        // }
+
+        if(req.file){
+            user.avatar = req.file.filename;
         }
 
         const updatedUser = await user.save();
