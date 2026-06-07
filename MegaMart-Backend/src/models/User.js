@@ -74,7 +74,7 @@ const userSchema = new mongoose.Schema(
 
     sellerRequestStatus:{
       type:String,
-      enum:["pending" , "approved" , "rejected"],
+      enum:["none", "pending" , "approved" , "rejected"],
       default:"none",
     }
 

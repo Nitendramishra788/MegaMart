@@ -4,6 +4,7 @@ const authRoutes = require('./routers/auth/authRoutes');
 const profileRoutes = require('./routers/user/profileRoutes');
 const path = require('path');
 const sellerRoutes = require('./routers/seller/sellerRoutes');
+const adminRoutes = require('./routers/admin/adminRoutes');
 
 
 
@@ -30,6 +31,7 @@ app.use(authRoutes);
 app.use('/api/auth' , authRoutes);
 app.use('/api/profile' , profileRoutes);
 app.use("/api/seller", sellerRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get('/', (req , res)=>{
     res.send("Welcome to MegaMart API");
