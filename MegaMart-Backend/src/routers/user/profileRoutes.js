@@ -6,6 +6,7 @@ const upload = require("../../middlewares/uploadMiddleware");
 const {
     updateProfile,
     changePassword,
+    addAddress,
 } = require('../../controllers/user/profileController');
 
 
@@ -17,6 +18,8 @@ router.put('/update',
 
     
 router.put('/change-password', protect, changePassword);
+
+router.post('/add-address' , protect , addAddress);
 
 
 module.exports = router;

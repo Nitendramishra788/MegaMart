@@ -33,6 +33,49 @@ const userSchema = new mongoose.Schema(
       type:String,
       enum:["user" , "admin" , "seller"],
       default:"user",
+    },
+
+    addresses:[
+      {
+        fullName:{
+          type:String,
+        },
+
+        phone:{
+          type:String,
+        },
+
+        piccode:{
+          type:String,
+        },
+
+        city:{
+          type:String,
+        },
+
+        state:{
+          type:String,
+        },
+
+        country:{
+          type:String,
+        },
+
+        addressLine:{
+          type:String,
+        },
+
+        isDefault:{
+          type:Boolean,
+          default:false,
+        }
+      }
+    ],
+
+    sellerRequestStatus:{
+      type:String,
+      enum:["pending" , "approved" , "rejected"],
+      default:"none",
     }
 
 
