@@ -77,9 +77,67 @@ const getMyStore = async (req, res)=>{
     }
 
     
+};
+
+
+// update store details
+
+const updateStore = async(req , res)=>{
+    try{
+        const {
+            storeName,
+            storeDescription
+        } = req.body;
+
+        const store = await Store.findOne({
+            owner:req.user._id,
+        });
+
+        if(!store){
+           return res.status(404).json({
+                success:false,
+                message:"store not found"
+            })
+        }
+
+        if(storeName){
+            store.storeName = storeName;
+        }
+
+        if(storeDescription){
+            store.storeDescription = storeDescription;
+        }
+
+        if(req.files?.storeLogo){
+            store.storeLogo = 
+            req.files.storeLogo[0].filename;
+        }
+
+        if(req.files?.storeDescription){
+            store.storeBanner = 
+            req.files.storeDescription[0].filename;
+        }
+
+
+        await store.save();
+
+        res.status(200).json({
+            success:true,
+            message:"Store Updated successFully"
+        })
+
+
+    }catch(err){
+        
+        res.status(500).json({
+            success:true,
+            message:err.message,
+        })
+}
 }
 
 module.exports = {
     createStore,
     getMyStore,
+    updateStore,
 }

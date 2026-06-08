@@ -7,6 +7,7 @@ const router = express.Router();
 const {
     createStore,
     getMyStore,
+    updateStore,
 } = require("../../controllers/strore/storeController");
 
 router.post(
@@ -30,13 +31,37 @@ router.post(
 );
 
 
+// update store detail
+
+router.put(
+    "/update",
+    protect,
+    seller,
+    upload.fields([
+        {
+            name:"storeLogo",
+            maxCount:1
+        },
+
+        {
+            name:"storeBanner",
+            maxCount:1
+        }
+
+    ]),
+
+    updateStore,
+);
+
+
 // get store data fetching by seller 
 
 router.get(
     "/my-store",
     protect,
     seller,
-    getMyStore
+    getMyStore,
+   
 );
 
 
