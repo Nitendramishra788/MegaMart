@@ -6,6 +6,7 @@ const router = express.Router();
 
 const {
     createStore,
+    getMyStore,
 } = require("../../controllers/strore/storeController");
 
 router.post(
@@ -26,6 +27,16 @@ router.post(
     ]),
 
     createStore
+);
+
+
+// get store data fetching by seller 
+
+router.get(
+    "/my-store",
+    protect,
+    seller,
+    getMyStore
 );
 
 

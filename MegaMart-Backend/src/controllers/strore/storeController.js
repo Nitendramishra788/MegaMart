@@ -47,6 +47,39 @@ const createStore = async(req, res)=>{
     }
 }
 
+
+
+// get store data 
+
+const getMyStore = async (req, res)=>{
+    try{
+        const store = await Store.findOne({
+            owner:req.user._id,
+        }).populate("owner" , "name , email , role")
+
+        if(!store){
+            res.status(404).json({
+                success:false,
+                message:"store not found"
+            })
+        }
+
+        res.status(200).json({
+            success:true,
+            message:"you data",
+            store,
+        })
+    }catch(err){
+        res.status(500).json({
+            success:false,
+            message:err.message
+        })
+    }
+
+    
+}
+
 module.exports = {
     createStore,
+    getMyStore,
 }
