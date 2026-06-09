@@ -1,23 +1,63 @@
-const multer = require  ("multer");
+const multer = require("multer");
+
 const path = require("path");
 
-// Set up storage engine for multer
+const fs = require("fs");
 
+
+// storage config
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "src/uploads/users");
+
+  destination: (req, file, cb) => {
+
+    let folder = "src/uploads/others";
+
+    // USER AVATAR
+    if (file.fieldname === "avatar") {
+
+      folder = "src/uploads/users";
+
+    }
+
+    // STORE IMAGES
+    else if (
+      file.fieldname === "storeLogo" ||
+      file.fieldname === "storeBanner"
+    ) {
+
+      folder = "src/uploads/stores";
+
+    }
+
+    // PRODUCT IMAGES
+    else if (file.fieldname === "images") {
+
+      folder = "src/uploads/products";
+
+    }
+
+    // auto create folder
+    fs.mkdirSync(folder, { recursive: true });
+
+    cb(null, folder);
   },
 
-  filename: function (req, file, cb) {
-    const uniqueName =
-      Date.now() + path.extname(file.originalname);
 
-    cb(null, uniqueName);
+  filename: (req, file, cb) => {
+
+    cb(
+      null,
+      Date.now() +
+        "-" +
+        Math.round(Math.random() * 1e9) +
+        path.extname(file.originalname)
+    );
+
   },
+
 });
 
 
-
-const upload = multer({storage:storage});
+const upload = multer({ storage });
 
 module.exports = upload;
