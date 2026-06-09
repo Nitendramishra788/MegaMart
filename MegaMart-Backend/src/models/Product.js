@@ -52,6 +52,18 @@ const productSchema = new  mongoose.Schema({
 
     ,
 
+    status:{
+        type:String,
+        enum:["pending" , "approved" , "rejected",],
+        default:"pending",
+    },
+
+    store: {
+   type: mongoose.Schema.Types.ObjectId,
+
+   ref: "store",
+},
+
     rating:{
         type:Number,
         default:0,

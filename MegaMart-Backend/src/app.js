@@ -12,6 +12,7 @@ const productRouter= require("./routers/product/productRoutes");
 
 
 
+
 const app = express();
 
 // Middleware
@@ -36,6 +37,7 @@ app.use("/api/seller", sellerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/store" , storeRoutes);
 app.use("/api/product" , productRouter);
+
 
 app.get('/', (req , res)=>{
     res.send("Welcome to MegaMart API");

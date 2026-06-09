@@ -41,7 +41,7 @@ const storeSchema = new mongoose.Schema({
 },
 
 {
-    timeseries:true,
+   timestamps:true
 }
 
 )
