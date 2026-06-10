@@ -2,7 +2,7 @@ const express = require ("express");
 const router = express.Router();
 const protect = require("../../middlewares/authMiddleware");
 const {seller} = require("../../middlewares/sellerMiddleware");
-const upload = require("../../middlewares/uploadMiddleware");
+
 
 const {
     createProduct,
@@ -19,7 +19,7 @@ router.post(
     "/create",
     protect,
     seller,
-    upload.array("images" , 5),
+   
     createProduct
 );
 

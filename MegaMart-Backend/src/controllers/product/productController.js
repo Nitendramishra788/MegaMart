@@ -13,9 +13,6 @@ const createProduct = async (req, res) => {
     const {
       title,
       description,
-      price,
-      discountPrice,
-      stock,
       brand,
       category,
     } = req.body;
@@ -34,10 +31,7 @@ const createProduct = async (req, res) => {
     }
 
 
-    // images
-    const images = req.files.map(
-      (file) => file.filename
-    );
+  
 
 
     // create product
@@ -47,17 +41,13 @@ const createProduct = async (req, res) => {
 
       description,
 
-      price,
-
-      discountPrice,
-
-      stock,
+  
 
       brand,
 
       category,
 
-      images,
+   
 
       seller: req.user._id,
 
@@ -93,6 +83,7 @@ const getMyProducts = async(req, res)=>{
     const products = await Product.find({
       seller:req.user._id,
     })
+    .populate("defaultVariant")
     .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -124,6 +115,7 @@ const getAllProducts = async(req , res)=>{
 
     .populate("store" ,  "storeLogo  storeBanner")
     .populate("seller" , "name")
+    .populate("defaultVariant")
     .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -149,7 +141,8 @@ const getSingleProduct = async(req , res)=>{
     const product = await Product.findById(
       req.params.id,
     )
-
+    
+    .populate("defaultVariant")
     .populate("store")
     .populate("seller" , "name email")
 

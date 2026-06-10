@@ -11,6 +11,7 @@ const getPendingProduct = async(req, res)=>{
 
         .populate("seller" , "name ,email")
         .populate("store" , "storeName")
+        .populate("defaultVariant")
         .sort({ createdAt: -1 });
 
         res.status(200).json({

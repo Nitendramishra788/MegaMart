@@ -1,80 +1,76 @@
 const mongoose = require("mongoose");
 
-const productSchema = new  mongoose.Schema({
-    title:{
-        type:String,
-        required:true,
-        trim:true,
+const productSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true,
     },
 
-    description:{
-        type:String,
-        required:true,
+    description: {
+        type: String,
+        required: true,
     },
 
-    price:{
-        type:Number,
-        required:true,
+
+
+    discountPrice: {
+        type: Number,
+        default: 0,
     },
 
-    discountPrice:{
-        type:Number,
-        default:0,
+
+
+    brand: {
+        type: String,
+        default: "",
     },
 
-    stock:{
-        type:Number,
-        required:true,
+    category: {
+        type: String,
+        required: true,
     },
 
-    brand:{
-        type:String,
-        default:"",
-    },
-
-    category:{
-        type:String,
-        required:true,
-    },
-
-    images:[
-        {
-            type:String,
-        },
-    ],
 
 
-    seller:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true,
+
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
     }
 
     ,
 
-    status:{
-        type:String,
-        enum:["pending" , "approved" , "rejected",],
-        default:"pending",
+    status: {
+        type: String,
+        enum: ["pending", "approved", "rejected",],
+        default: "pending",
+    },
+
+    defaultVariant: {
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref: "ProductVariant",
     },
 
     store: {
-   type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
 
-   ref: "store",
-},
+        ref: "store",
+    },
 
-    rating:{
-        type:Number,
-        default:0,
+    rating: {
+        type: Number,
+        default: 0,
     },
 },
 
- {
-    timestamps: true,
-  }
+    {
+        timestamps: true,
+    }
 
 );
 
-module.exports = mongoose.model("product" , productSchema);
+module.exports = mongoose.model("product", productSchema);
 
