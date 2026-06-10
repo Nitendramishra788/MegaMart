@@ -7,6 +7,7 @@ const sellerRoutes = require('./routers/seller/sellerRoutes');
 const adminRoutes = require('./routers/admin/adminRoutes');
 const storeRoutes = require("./routers/store/storeRoutes");
 const productRouter= require("./routers/product/productRoutes");
+const variantRoutes = require("./routers/variant/variantRoutes");
 
 
 
@@ -37,6 +38,7 @@ app.use("/api/seller", sellerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/store" , storeRoutes);
 app.use("/api/product" , productRouter);
+app.use("/api/variant" , variantRoutes);
 
 
 app.get('/', (req , res)=>{

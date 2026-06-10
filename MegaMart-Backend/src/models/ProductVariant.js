@@ -44,9 +44,16 @@ const productVariantSchema  = new mongoose.Schema({
         required:true,
     },
 
-    images:{
-        type:String,
-    },
+   
+    images: [
+
+  {
+
+    type: String,
+
+  }
+
+],
 
       isDefault: {
       type: Boolean,
