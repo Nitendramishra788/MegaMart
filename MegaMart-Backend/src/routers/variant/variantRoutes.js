@@ -11,6 +11,10 @@ const {
   getProductVariants,
 
   setDefaultVariant,
+
+  updateVariant,
+
+  deleteVariant,
 } = require("../../controllers/variant/variantController");
 
 
@@ -32,12 +36,36 @@ router.get(
       getProductVariants
 );
 
+// update variant router
+
+router.put(
+  "/update/:variantId",
+  protect,
+  seller,
+  upload.array("images", 5),
+  updateVariant,
+
+);
+
 
 router.put(
     "/default/:variantId",
     protect,
     seller,
     setDefaultVariant,
+);
+
+
+router.delete(
+
+    "/delete/:variantId",
+
+    protect,
+
+    seller,
+
+    deleteVariant
+
 );
 
 
