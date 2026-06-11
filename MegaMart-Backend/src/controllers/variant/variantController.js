@@ -67,14 +67,41 @@ const createVariant = async (req, res) => {
         });
 
 
-        // SET DEFAULT VARIANT
-        if (isDefault) {
 
-            product.defaultVariant = variant._id;
+   if (isDefault) {
 
-            await product.save();
+    // REMOVE OLD DEFAULT VARIANT
+    await ProductVariant.updateMany(
+
+        {
+
+            product: product._id,
+
+            isDefault: true,
+
+        },
+
+        {
+
+            isDefault: false,
 
         }
+
+    );
+
+
+    // SET NEW DEFAULT
+    variant.isDefault = true;
+
+    await variant.save();
+
+
+    // UPDATE PRODUCT
+    product.defaultVariant = variant._id;
+
+    await product.save();
+
+}
 
 
         res.status(201).json({
@@ -152,13 +179,46 @@ const setDefaultVariant = async (req, res) => {
             })
         }
 
-        await Product.findByIdAndUpdate(
-            variant.product,
+        
+        // REMOVE OLD DEFAULT VARIANTS
+await ProductVariant.updateMany(
 
-            {
-                defaultVariant: variant._id,
-            }
-        );
+    {
+
+        product: variant.product,
+
+        isDefault: true,
+
+    },
+
+    {
+
+        isDefault: false,
+
+    }
+
+);
+
+
+// SET NEW DEFAULT
+variant.isDefault = true;
+
+await variant.save();
+
+
+// UPDATE PRODUCT
+await Product.findByIdAndUpdate(
+
+    variant.product,
+
+    {
+
+        defaultVariant: variant._id,
+
+    }
+
+);
+
 
         res.status(200).json({
 
