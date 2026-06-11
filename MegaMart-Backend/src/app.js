@@ -8,9 +8,11 @@ const adminRoutes = require('./routers/admin/adminRoutes');
 const storeRoutes = require("./routers/store/storeRoutes");
 const productRouter= require("./routers/product/productRoutes");
 const variantRoutes = require("./routers/variant/variantRoutes");
+const categoryRoutes = require("./routers/product/categoryRoutes");
 
 
-
+// ERROR MIDDLEWARE (IMPORTANT)
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
 
 
@@ -39,10 +41,16 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/store" , storeRoutes);
 app.use("/api/product" , productRouter);
 app.use("/api/variant" , variantRoutes);
+app.use("/api/category" , categoryRoutes);
 
 
 app.get('/', (req , res)=>{
     res.send("Welcome to MegaMart API");
 });
+
+
+// ERROR HANDLER 
+
+app.use(errorMiddleware);
 
 module.exports = app;

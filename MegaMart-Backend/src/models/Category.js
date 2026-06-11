@@ -59,12 +59,12 @@ categorySchema.pre("save", function (next) {
 
   }
 
-  next();
+  
 });
 
 
 // INDEXES
-categorySchema.index({ slug: 1 });
+// categorySchema.index({ slug: 1 });
 
 categorySchema.index({
   parentCategory: 1,
