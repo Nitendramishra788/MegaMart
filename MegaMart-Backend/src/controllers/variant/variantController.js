@@ -68,40 +68,40 @@ const createVariant = async (req, res) => {
 
 
 
-   if (isDefault) {
+        if (isDefault) {
 
-    // REMOVE OLD DEFAULT VARIANT
-    await ProductVariant.updateMany(
+            // REMOVE OLD DEFAULT VARIANT
+            await ProductVariant.updateMany(
 
-        {
+                {
 
-            product: product._id,
+                    product: product._id,
 
-            isDefault: true,
+                    isDefault: true,
 
-        },
+                },
 
-        {
+                {
 
-            isDefault: false,
+                    isDefault: false,
+
+                }
+
+            );
+
+
+            // SET NEW DEFAULT
+            variant.isDefault = true;
+
+            await variant.save();
+
+
+            // UPDATE PRODUCT
+            product.defaultVariant = variant._id;
+
+            await product.save();
 
         }
-
-    );
-
-
-    // SET NEW DEFAULT
-    variant.isDefault = true;
-
-    await variant.save();
-
-
-    // UPDATE PRODUCT
-    product.defaultVariant = variant._id;
-
-    await product.save();
-
-}
 
 
         res.status(201).json({
@@ -131,17 +131,17 @@ const getProductVariants = async (req, res) => {
 
             .sort({ createdAt: -1 });
 
-       res.status(200).json({
+        res.status(200).json({
 
-    success: true,
+            success: true,
 
-    message: "variant result fetch",
+            message: "variant result fetch",
 
-    count: variants.length,
+            count: variants.length,
 
-    variants,
+            variants,
 
-});
+        });
 
 
     } catch (err) {
@@ -168,56 +168,56 @@ const setDefaultVariant = async (req, res) => {
             })
         }
 
-        if(
+        if (
             variant.seller.toString() !=
-            req.user._id.toString()                              
-        ){
+            req.user._id.toString()
+        ) {
 
             return res.status(403).json({
-                success:false,
-                message:"Unauthorized aceess "
+                success: false,
+                message: "Unauthorized aceess "
             })
         }
 
-        
+
         // REMOVE OLD DEFAULT VARIANTS
-await ProductVariant.updateMany(
+        await ProductVariant.updateMany(
 
-    {
+            {
 
-        product: variant.product,
+                product: variant.product,
 
-        isDefault: true,
+                isDefault: true,
 
-    },
+            },
 
-    {
+            {
 
-        isDefault: false,
+                isDefault: false,
 
-    }
+            }
 
-);
-
-
-// SET NEW DEFAULT
-variant.isDefault = true;
-
-await variant.save();
+        );
 
 
-// UPDATE PRODUCT
-await Product.findByIdAndUpdate(
+        // SET NEW DEFAULT
+        variant.isDefault = true;
 
-    variant.product,
+        await variant.save();
 
-    {
 
-        defaultVariant: variant._id,
+        // UPDATE PRODUCT
+        await Product.findByIdAndUpdate(
 
-    }
+            variant.product,
 
-);
+            {
+
+                defaultVariant: variant._id,
+
+            }
+
+        );
 
 
         res.status(200).json({
@@ -244,10 +244,10 @@ await Product.findByIdAndUpdate(
 
 module.exports = {
 
-  createVariant,
+    createVariant,
 
-  getProductVariants,
+    getProductVariants,
 
-  setDefaultVariant,
+    setDefaultVariant,
 
 };
