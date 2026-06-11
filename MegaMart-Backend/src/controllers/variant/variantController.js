@@ -141,6 +141,17 @@ const setDefaultVariant = async (req, res) => {
             })
         }
 
+        if(
+            variant.seller.toString() !=
+            req.user._id.toString()                              
+        ){
+
+            return res.status(403).json({
+                success:false,
+                message:"Unauthorized aceess "
+            })
+        }
+
         await Product.findByIdAndUpdate(
             variant.product,
 
