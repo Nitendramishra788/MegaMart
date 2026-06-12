@@ -93,6 +93,78 @@ const createCategory = asyncHandler(
 );
 
 
+// get all category 
+
+const getAllCategories =
+  asyncHandler(async (
+    req,
+    res
+  ) => {
+
+    const categories =
+      await Category.find()
+
+        .populate(
+          "parentCategory",
+          "name slug"
+        )
+
+        .sort({
+          createdAt: -1,
+        });
+
+
+    res.status(200).json({
+      success: true,
+
+      count:
+        categories.length,
+
+      categories,
+    });
+
+  });
+
+
+  // find by id Single cetegory
+
+  const getSingleCategory = asyncHandler(
+    async(req , res)=>{
+
+      const {id} = req.params;
+
+      if(!mongoose.Types.ObjectId.isValid(id)){
+        throw new apiErrr(
+          400,
+          "inValid Category ID !"
+        )
+      }
+
+
+      const category = await Category.findById(id)
+
+      .populate("parentCategory" , "name slug");
+
+      if(!category){
+        throw new apiErrr(
+          404,
+          
+          "Category not Found !"
+        )
+      }
+
+
+      res.status(200).json({
+        success:true,
+        category,
+      })
+      
+
+    }
+  )
+
 module.exports = {
     createCategory,
+    getAllCategories,
+    getSingleCategory,
 }

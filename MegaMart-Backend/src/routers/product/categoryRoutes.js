@@ -6,6 +6,8 @@ const {admin} = require("../../middlewares/adminMiddleware");
 
 const {
     createCategory,
+    getAllCategories,
+    getSingleCategory
 } = require("../../controllers/product/categoryController");
 
 
@@ -15,6 +17,21 @@ router.post(
     admin,
     createCategory
 );
+
+// get all cotegory router
+
+router.get(
+    "/all",
+    getAllCategories,
+);
+
+
+// get single cotegory router
+
+router.get(
+    "/:id",
+    getSingleCategory
+)
 
 
 
