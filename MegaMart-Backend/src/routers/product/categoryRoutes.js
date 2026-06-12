@@ -9,6 +9,7 @@ const {
     getAllCategories,
     getSingleCategory,
     updateCategory,
+    deleteCategory,
 } = require("../../controllers/product/categoryController");
 
 
@@ -45,6 +46,16 @@ router.get(
     getSingleCategory
 )
 
+
+
+// delete Category router
+
+router.delete(
+    "/delete/:id",
+    protect,
+    admin,
+    deleteCategory,
+);
 
 
 module.exports = router;

@@ -289,9 +289,65 @@ const getAllCategories =
     }
   )
 
+
+  // delete category router
+
+  const deleteCategory = asyncHandler(
+    async(req , res)=>{
+
+      const {id} = req.params;
+
+      // valiad objectId
+
+      if(!mongoose.Types.ObjectId.isValid(id)){
+        throw new apiErrr(
+          400,
+          "Invalid category ID !"
+        )
+      }
+
+      // find category
+
+      const category = await Category.findById(id);
+
+      if(!category){
+        throw new apiErrr(
+          404,
+          "category not found"
+        )
+      }
+
+      // check child category 
+
+      const hasChild = await Category.findOne({
+        parentCategory:id
+      })
+
+      if(hasChild){
+        throw new apiErrr(
+          400,
+          "Cannot delete category with subcategories"
+        );
+      }
+
+      // now delte
+
+      await Category.findByIdAndDelete(id);
+
+      res.status(200).json({
+      success: true,
+      message:
+        "Category deleted successfully",
+    });
+
+
+    }
+  )
+
 module.exports = {
     createCategory,
     getAllCategories,
     getSingleCategory,
     updateCategory,
+    deleteCategory
 }
