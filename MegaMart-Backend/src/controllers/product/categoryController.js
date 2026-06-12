@@ -163,8 +163,135 @@ const getAllCategories =
     }
   )
 
+  // update Router
+
+  const updateCategory = asyncHandler(
+    async(req , res)=>{
+
+      const {id} = req.params;
+
+      const {
+        name, 
+        parentCategory,
+      } = req.body;
+
+      // valiad category 
+      if(!mongoose.Types.ObjectId.isValid(id)){
+        throw new apiErrr(
+          400,
+          "Invalid Category ID"
+        )
+      };
+
+
+      const category = await Category.findById(id);
+
+      if(!category){
+        throw new apiErrr(
+          404,
+          "category not found"
+        );
+
+        
+        // check dublicate name 
+
+        if(name){
+          const alreadyExist = Category.findOne({
+            name,
+            _id:{
+              $ne:id,
+            },
+          });
+
+          if(alreadyExist){
+            throw new apiErrr(
+              400,
+              "this name of category already exist!"
+            )
+          }
+
+
+        }
+
+      }
+
+
+      category.name = name;
+
+      category.slug = slugify(name , 
+        {
+          lower:true,
+          strict:true,
+        }
+      );
+
+
+      // parent Category update
+
+      if(parentCategory != undefined){
+         
+        // safe protection
+        if(parentCategory === id){
+          throw new apiErrr(
+            400,
+            "Category cannot be its own parent"
+          )
+        }
+
+
+        // check validation of ID
+
+        if(
+
+          parentCategory &&
+          !mongoose.Types.ObjectId.isValid(parentCategory)
+
+         ){
+
+          400,
+          "invalid Parent category ID !"
+
+         }
+
+         if(parentCategory){
+
+          const parent = await Category.findById(
+            parentCategory
+          );
+
+          if(!parent){
+
+            throw new apiErrr(
+              404,
+              "parent Category not found"
+            )
+          }
+
+          category.level = parent.level + 1;
+
+         }else{
+          category.level =0;
+         }
+
+         category.parentCategory = parentCategory ||null;
+      }
+
+      // save update in the database
+
+        await  category.save();
+
+        res.status(200).json({
+          success:true,
+          message:"category updated successFully..",
+           category,
+        })
+
+    }
+  )
+
 module.exports = {
     createCategory,
     getAllCategories,
     getSingleCategory,
+    updateCategory,
 }

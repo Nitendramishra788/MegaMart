@@ -7,7 +7,8 @@ const {admin} = require("../../middlewares/adminMiddleware");
 const {
     createCategory,
     getAllCategories,
-    getSingleCategory
+    getSingleCategory,
+    updateCategory,
 } = require("../../controllers/product/categoryController");
 
 
@@ -23,6 +24,17 @@ router.post(
 router.get(
     "/all",
     getAllCategories,
+);
+
+
+
+// update category router
+
+router.put(
+    "/update/:id",
+    protect,
+    admin,
+    updateCategory
 );
 
 
