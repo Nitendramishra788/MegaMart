@@ -2,6 +2,14 @@ const Product = require("../../models/Product");
 
 const Store = require("../../models/Store");
 
+const mongoose =
+  require("mongoose");
+
+const Category =
+  require("../../models/Category");
+
+const apiErrr =
+  require("../../utils/apiErrr");
 
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
@@ -17,6 +25,26 @@ const createProduct = async (req, res) => {
       category,
     } = req.body;
 
+    // category validation
+
+    if (!mongoose.Types.ObjectId.isValid(category)) {
+      throw new apiErrr(
+        400,
+
+        "Invalid category ID !"
+      )
+    }
+
+    // CATEGORY EXISTS or not
+
+    const existCategory = await Category.findById(category);
+
+    if (!existCategory) {
+      throw new apiErrr(
+        400,
+        "this category already exist"
+      )
+    }
 
     // seller store
     const store = await Store.findOne({
@@ -31,7 +59,7 @@ const createProduct = async (req, res) => {
     }
 
 
-  
+
 
 
     // create product
@@ -41,13 +69,13 @@ const createProduct = async (req, res) => {
 
       description,
 
-  
+
 
       brand,
 
       category,
 
-   
+
 
       seller: req.user._id,
 
@@ -77,27 +105,31 @@ const createProduct = async (req, res) => {
 
 // get only seller product 
 
-const getMyProducts = async(req, res)=>{
-  try{
+const getMyProducts = async (req, res) => {
+  try {
 
     const products = await Product.find({
-      seller:req.user._id,
+      seller: req.user._id,
     })
-    .populate("defaultVariant")
-    .sort({ createdAt: -1 });
+      .populate("defaultVariant")
+      .populate(
+        "category",
+        "name slug"
+      )
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
-      success:true,
+      success: true,
       count: products.length,
       products,
     })
 
 
 
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
-      success:false,
-      message:err.message,
+      success: false,
+      message: err.message,
     })
   }
 }
@@ -107,28 +139,33 @@ const getMyProducts = async(req, res)=>{
 
 // here the part of public api
 
-const getAllProducts = async(req , res)=>{
-  try{
+const getAllProducts = async (req, res) => {
+  try {
     const products = await Product.find({
-      status:"approved"
+      status: "approved"
     })
 
-    .populate("store" ,  "storeLogo  storeBanner")
-    .populate("seller" , "name")
-    .populate("defaultVariant")
-    .sort({ createdAt: -1 });
+      .populate("store", "storeLogo  storeBanner")
+      .populate("seller", "name")
+      .populate(
+        "category",
+        "name slug"
+      )
+      .populate("defaultVariant")
+
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
-      success:true,
-      message:"product fetch",
-      count:products.length,
+      success: true,
+      message: "product fetch",
+      count: products.length,
       products
     })
 
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
-      success:false,
-      message:err.message,
+      success: false,
+      message: err.message,
     })
   }
 }
@@ -136,45 +173,49 @@ const getAllProducts = async(req , res)=>{
 
 // get single product details
 
-const getSingleProduct = async(req , res)=>{
-  try{
+const getSingleProduct = async (req, res) => {
+  try {
     const product = await Product.findById(
       req.params.id,
     )
-    
-    .populate("defaultVariant")
-    .populate("store")
-    .populate("seller" , "name email")
 
-    if(!product){
+      .populate("defaultVariant")
+      .populate("store")
+      .populate("seller", "name email")
+      .populate(
+        "category",
+        "name slug"
+      )
+
+    if (!product) {
       res.status(404).josn({
-        success:false,
-        message:"not found product",
+        success: false,
+        message: "not found product",
       })
 
     }
 
     // on;y approved product show for the public
 
-    if(product.status!=="approved"){
+    if (product.status !== "approved") {
       res.status(403).json({
-        success:false,
-        message:"product not available",
+        success: false,
+        message: "product not available",
       })
     }
 
 
     res.status(200).json({
-      success:true,
+      success: true,
       product,
     });
 
 
 
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
-      success:false,
-      message:err.message,
+      success: false,
+      message: err.message,
     })
   }
 
@@ -184,5 +225,5 @@ module.exports = {
   createProduct,
   getMyProducts,
   getAllProducts,
- getSingleProduct,
+  getSingleProduct,
 };
