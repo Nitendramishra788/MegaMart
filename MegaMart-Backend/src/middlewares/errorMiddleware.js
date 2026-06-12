@@ -5,11 +5,11 @@ const errorHandler = (
 )=>{
   let statusCode = err.statusCode ||500;
 
-  let message = err.message || "Internal servel Error";
+  let message = err.message || "Internal Server Error";
 
   // mongoose Invalid ObjectID 
 
-  if(err.name===CastError){
+  if (err.name === "CastError"){
     statusCode=400;
     message= `Invaild ${err.path}`;
   }
@@ -18,12 +18,12 @@ const errorHandler = (
 
 if(err instanceof TypeError){
   statusCode=500;
-  message= "Type Error"+err.message;
+  message= "Type Error" + err.message;
 }
 
 // Duplicate key err
 
-if(err.code =11000){
+if (err.code === 11000){
   statusCode=400;
   message = `${Object.keys(err.keyValue)}already exists`
 }
@@ -38,7 +38,7 @@ if(err.name === "ValidationError"){
       .join(", ");
 }
 
- console.error(err);
+//  console.error(err);
 
 //  Final response
 

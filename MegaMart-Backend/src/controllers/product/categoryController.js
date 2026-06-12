@@ -1,8 +1,12 @@
 const Category = require("../../models/Category");
 const mongoose = require("mongoose");
+const ApiError = require(
+  "../../utils/apiErrr"
+);
 
 const asyncHandler = require("../../utils/asyncHandler");
 const slugify = require("slugify");
+const apiErrr = require("../../utils/apiErrr");
 
 const createCategory = asyncHandler(
   async (req, res) => {
@@ -14,10 +18,10 @@ const createCategory = asyncHandler(
 
     // CHECK NAME
     if (!name) {
-      return res.status(400).json({
-        success: false,
-        message: "Category name is required",
-      });
+     throw new apiErrr(
+      400,
+      "Category name is required",
+     )
     }
 
     // DUPLICATE CHECK
@@ -25,10 +29,10 @@ const createCategory = asyncHandler(
       await Category.findOne({ name });
 
     if (existingCategory) {
-      return res.status(400).json({
-        success: false,
-        message: "Category already exists",
-      });
+      throw new  apiErrr(
+        400,
+        "Category already exists",
+      )
     }
 
     let level = 0;
@@ -42,10 +46,11 @@ const createCategory = asyncHandler(
     parentCategory
   )
 ) {
-  return res.status(400).json({
-    success: false,
-    message: "Invalid parent category ID",
-  });
+ 
+  throw new apiErrr(
+    400,
+    "Invalid parent category ID",
+  )
 }
 
       const parent =
@@ -54,10 +59,10 @@ const createCategory = asyncHandler(
         );
 
       if (!parent) {
-        return res.status(404).json({
-          success: false,
-          message: "Parent category not found",
-        });
+       throw new apiErrr(
+        404,
+        "Invalid parent category ID",
+       )
       }
 
       level = parent.level + 1;
