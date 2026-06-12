@@ -1,6 +1,8 @@
 const Category = require("../../models/Category");
+const mongoose = require("mongoose");
 
 const asyncHandler = require("../../utils/asyncHandler");
+const slugify = require("slugify");
 
 const createCategory = asyncHandler(
   async (req, res) => {
@@ -34,6 +36,18 @@ const createCategory = asyncHandler(
     // IF CHILD CATEGORY
     if (parentCategory) {
 
+      if (
+  parentCategory &&
+  !mongoose.Types.ObjectId.isValid(
+    parentCategory
+  )
+) {
+  return res.status(400).json({
+    success: false,
+    message: "Invalid parent category ID",
+  });
+}
+
       const parent =
         await Category.findById(
           parentCategory
@@ -48,6 +62,11 @@ const createCategory = asyncHandler(
 
       level = parent.level + 1;
     }
+
+    const slug = slugify(name, {
+  lower: true,
+  strict: true,
+});
 
     // CREATE CATEGORY
     const category =
