@@ -18,10 +18,10 @@ const createCategory = asyncHandler(
 
     // CHECK NAME
     if (!name) {
-     throw new apiErrr(
-      400,
-      "Category name is required",
-     )
+      throw new apiErrr(
+        400,
+        "Category name is required",
+      )
     }
 
     // DUPLICATE CHECK
@@ -29,7 +29,7 @@ const createCategory = asyncHandler(
       await Category.findOne({ name });
 
     if (existingCategory) {
-      throw new  apiErrr(
+      throw new apiErrr(
         400,
         "Category already exists",
       )
@@ -41,17 +41,17 @@ const createCategory = asyncHandler(
     if (parentCategory) {
 
       if (
-  parentCategory &&
-  !mongoose.Types.ObjectId.isValid(
-    parentCategory
-  )
-) {
- 
-  throw new apiErrr(
-    400,
-    "Invalid parent category ID",
-  )
-}
+        parentCategory &&
+        !mongoose.Types.ObjectId.isValid(
+          parentCategory
+        )
+      ) {
+
+        throw new apiErrr(
+          400,
+          "Invalid parent category ID",
+        )
+      }
 
       const parent =
         await Category.findById(
@@ -59,19 +59,19 @@ const createCategory = asyncHandler(
         );
 
       if (!parent) {
-       throw new apiErrr(
-        404,
-        "Invalid parent category ID",
-       )
+        throw new apiErrr(
+          404,
+          "Invalid parent category ID",
+        )
       }
 
       level = parent.level + 1;
     }
 
     const slug = slugify(name, {
-  lower: true,
-  strict: true,
-});
+      lower: true,
+      strict: true,
+    });
 
     // CREATE CATEGORY
     const category =
@@ -126,228 +126,297 @@ const getAllCategories =
   });
 
 
-  // find by id Single cetegory
+// find by id Single cetegory
 
-  const getSingleCategory = asyncHandler(
-    async(req , res)=>{
+const getSingleCategory = asyncHandler(
+  async (req, res) => {
 
-      const {id} = req.params;
+    const { id } = req.params;
 
-      if(!mongoose.Types.ObjectId.isValid(id)){
-        throw new apiErrr(
-          400,
-          "inValid Category ID !"
-        )
-      }
-
-
-      const category = await Category.findById(id)
-
-      .populate("parentCategory" , "name slug");
-
-      if(!category){
-        throw new apiErrr(
-          404,
-          
-          "Category not Found !"
-        )
-      }
-
-
-      res.status(200).json({
-        success:true,
-        category,
-      })
-      
-
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new apiErrr(
+        400,
+        "inValid Category ID !"
+      )
     }
-  )
-
-  // update Router
-
-  const updateCategory = asyncHandler(
-    async(req , res)=>{
-
-      const {id} = req.params;
-
-      const {
-        name, 
-        parentCategory,
-      } = req.body;
-
-      // valiad category 
-      if(!mongoose.Types.ObjectId.isValid(id)){
-        throw new apiErrr(
-          400,
-          "Invalid Category ID"
-        )
-      };
 
 
-      const category = await Category.findById(id);
+    const category = await Category.findById(id)
 
-      if(!category){
-        throw new apiErrr(
-          404,
-          "category not found"
-        );
+      .populate("parentCategory", "name slug");
 
-        
-        // check dublicate name 
+    if (!category) {
+      throw new apiErrr(
+        404,
 
-        if(name){
-          const alreadyExist = Category.findOne({
-            name,
-            _id:{
-              $ne:id,
-            },
-          });
-
-          if(alreadyExist){
-            throw new apiErrr(
-              400,
-              "this name of category already exist!"
-            )
-          }
+        "Category not Found !"
+      )
+    }
 
 
-        }
+    res.status(200).json({
+      success: true,
+      category,
+    })
 
-      }
+
+  }
+)
+
+// update Router
+
+const updateCategory = asyncHandler(
+  async (req, res) => {
+
+    const { id } = req.params;
+
+    const {
+      name,
+      parentCategory,
+    } = req.body;
+
+    // valiad category 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new apiErrr(
+        400,
+        "Invalid Category ID"
+      )
+    };
 
 
-      category.name = name;
+    const category = await Category.findById(id);
 
-      category.slug = slugify(name , 
-        {
-          lower:true,
-          strict:true,
-        }
+    if (!category) {
+      throw new apiErrr(
+        404,
+        "category not found"
       );
 
 
-      // parent Category update
+      // check dublicate name 
 
-      if(parentCategory != undefined){
-         
-        // safe protection
-        if(parentCategory === id){
+      if (name) {
+        const alreadyExist = await Category.findOne({
+          name,
+          _id: {
+            $ne: id,
+          },
+        });
+
+        if (alreadyExist) {
           throw new apiErrr(
             400,
-            "Category cannot be its own parent"
+            "this name of category already exist!"
           )
         }
 
 
-        // check validation of ID
-
-        if(
-
-          parentCategory &&
-          !mongoose.Types.ObjectId.isValid(parentCategory)
-
-         ){
-
-          400,
-          "invalid Parent category ID !"
-
-         }
-
-         if(parentCategory){
-
-          const parent = await Category.findById(
-            parentCategory
-          );
-
-          if(!parent){
-
-            throw new apiErrr(
-              404,
-              "parent Category not found"
-            )
-          }
-
-          category.level = parent.level + 1;
-
-         }else{
-          category.level =0;
-         }
-
-         category.parentCategory = parentCategory ||null;
       }
-
-      // save update in the database
-
-        await  category.save();
-
-        res.status(200).json({
-          success:true,
-          message:"category updated successFully..",
-           category,
-        })
 
     }
-  )
 
 
-  // delete category router
+    category.name = name;
 
-  const deleteCategory = asyncHandler(
-    async(req , res)=>{
+    category.slug = slugify(name,
+      {
+        lower: true,
+        strict: true,
+      }
+    );
 
-      const {id} = req.params;
 
-      // valiad objectId
+    // parent Category update
 
-      if(!mongoose.Types.ObjectId.isValid(id)){
+    if (parentCategory != undefined) {
+
+      // safe protection
+      if (parentCategory === id) {
         throw new apiErrr(
           400,
-          "Invalid category ID !"
+          "Category cannot be its own parent"
         )
       }
 
-      // find category
 
-      const category = await Category.findById(id);
+      // check validation of ID
 
-      if(!category){
-        throw new apiErrr(
-          404,
-          "category not found"
-        )
-      }
+      if (
 
-      // check child category 
+        parentCategory &&
+        !mongoose.Types.ObjectId.isValid(parentCategory)
 
-      const hasChild = await Category.findOne({
-        parentCategory:id
-      })
+      ) {
 
-      if(hasChild){
         throw new apiErrr(
           400,
-          "Cannot delete category with subcategories"
+          "invalid Parent category ID !"
         );
+
       }
 
-      // now delte
+      if (parentCategory) {
 
-      await Category.findByIdAndDelete(id);
+        const parent = await Category.findById(
+          parentCategory
+        );
 
-      res.status(200).json({
+        if (!parent) {
+
+          throw new apiErrr(
+            404,
+            "parent Category not found"
+          )
+        }
+
+        category.level = parent.level + 1;
+
+      } else {
+        category.level = 0;
+      }
+
+      category.parentCategory = parentCategory || null;
+    }
+
+    // save update in the database
+
+    await category.save();
+
+    res.status(200).json({
+      success: true,
+      message: "category updated successFully..",
+      category,
+    })
+
+  }
+)
+
+
+// delete category router
+
+const deleteCategory = asyncHandler(
+  async (req, res) => {
+
+    const { id } = req.params;
+
+    // valiad objectId
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new apiErrr(
+        400,
+        "Invalid category ID !"
+      )
+    }
+
+    // find category
+
+    const category = await Category.findById(id);
+
+    if (!category) {
+      throw new apiErrr(
+        404,
+        "category not found"
+      )
+    }
+
+    // check child category 
+
+    const hasChild = await Category.findOne({
+      parentCategory: id
+    })
+
+    if (hasChild) {
+      throw new apiErrr(
+        400,
+        "Cannot delete category with subcategories"
+      );
+    }
+
+    // now delte
+
+    await Category.findByIdAndDelete(id);
+
+    res.status(200).json({
       success: true,
       message:
         "Category deleted successfully",
     });
 
 
-    }
-  )
+  }
+)
+
+
+
+//  category tree 
+
+
+const getCategoryTree = asyncHandler(
+  async (req, res) => {
+
+    // get all category 
+
+    const categories = await Category.find()
+
+      .sort({ createdAt: 1 });
+
+    // recursive function
+
+    // RECURSIVE FUNCTION
+    const buildTree = (
+      parentId = null
+    ) => {
+
+      return categories
+
+        .filter((cat) =>
+
+          String(
+            cat.parentCategory
+          ) === String(parentId)
+        )
+
+        .map((cat) => ({
+
+          _id: cat._id,
+
+          name: cat.name,
+
+          slug: cat.slug,
+
+          level: cat.level,
+
+          children:
+            buildTree(cat._id),
+
+        }));
+
+    };
+
+    const tree = buildTree(null);
+
+    res.status(200).json({
+
+      success: true,
+
+      message:
+        "Category tree fetched",
+
+      categories:
+        tree,
+
+    });
+
+  }
+)
+
+
 
 module.exports = {
-    createCategory,
-    getAllCategories,
-    getSingleCategory,
-    updateCategory,
-    deleteCategory
+  createCategory,
+  getAllCategories,
+  getSingleCategory,
+  updateCategory,
+  deleteCategory,
+  getCategoryTree
 }

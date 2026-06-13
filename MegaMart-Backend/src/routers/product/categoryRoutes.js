@@ -10,6 +10,7 @@ const {
     getSingleCategory,
     updateCategory,
     deleteCategory,
+    getCategoryTree,
 } = require("../../controllers/product/categoryController");
 
 
@@ -18,6 +19,11 @@ router.post(
     protect,
     admin,
     createCategory
+);
+
+router.get(
+  "/tree",
+  getCategoryTree
 );
 
 // get all cotegory router
