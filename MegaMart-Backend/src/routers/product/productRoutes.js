@@ -9,6 +9,7 @@ const {
   getMyProducts,
   getAllProducts,
   getSingleProduct,
+  getProductbyCategory,
 } = require("../../controllers/product/productController");
 
 
@@ -41,6 +42,12 @@ router.get("/", getAllProducts);
 
 // SINGLE PRODUCT
 router.get("/:id", getSingleProduct);
+
+router.get(
+  "/category/:slug",
+  getProductbyCategory,
+);
+
 
 
 module.exports = router;

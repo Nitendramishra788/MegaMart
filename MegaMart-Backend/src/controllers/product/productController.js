@@ -10,6 +10,8 @@ const Category =
 
 const apiErrr =
   require("../../utils/apiErrr");
+const asyncHandler = require("../../utils/asyncHandler");
+const { populate } = require("../../models/User");
 
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
@@ -220,10 +222,94 @@ const getSingleProduct = async (req, res) => {
   }
 
 }
+// get product by category slug
+
+const getProductbyCategory =
+asyncHandler(
+
+  async(req , res)=>{
+
+    const { slug } =
+    req.params;
+
+
+    // FIND CATEGORY
+    const category =
+    await Category.findOne({
+      slug,
+    });
+
+
+    if(!category){
+
+      throw new apiErrr(
+        404,
+        "Category not found"
+      );
+    }
+
+
+    // FIND PRODUCTS
+    const products =
+    await Product.find({
+
+      category:
+      category._id,
+
+      status:
+      "approved"
+
+    })
+
+    .populate(
+      "category",
+      "slug name"
+    )
+
+    .populate(
+      "seller",
+      "name"
+    )
+
+    .populate(
+      "store",
+      "storeName storeBanner"
+    )
+
+    .populate(
+      "defaultVariant"
+    )
+
+    .sort({
+      createdAt: -1,
+    });
+
+
+    res.status(200).json({
+
+      success:true,
+
+      message:
+      "Category products fetched",
+
+      category:
+      category.name,
+
+      count:
+      products.length,
+
+      products,
+
+    });
+
+  }
+
+);
 
 module.exports = {
   createProduct,
   getMyProducts,
   getAllProducts,
   getSingleProduct,
+  getProductbyCategory,
 };
