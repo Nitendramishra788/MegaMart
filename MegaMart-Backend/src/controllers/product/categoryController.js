@@ -412,11 +412,155 @@ const getCategoryTree = asyncHandler(
 
 
 
+// TOGGLE CATEGORY STATUS
+
+const toggleCategoryStatus =
+asyncHandler(
+
+  async(req , res)=>{
+
+    const { id } =
+    req.params;
+
+
+    // VALID ID
+    if(
+      !mongoose.Types.ObjectId
+      .isValid(id)
+    ){
+
+      throw new apiErrr(
+        400,
+        "Invalid category ID"
+      );
+    }
+
+
+    // FIND CATEGORY
+    const category =
+    await Category.findById(id);
+
+
+    if(!category){
+
+      throw new apiErrr(
+        404,
+        "Category not found"
+      );
+    }
+
+
+    // TOGGLE STATUS
+    category.isActive =
+    !category.isActive;
+
+
+    await category.save();
+
+
+    res.status(200).json({
+
+      success: true,
+
+      message:
+      `Category ${
+        category.isActive
+        ? "activated"
+        : "disabled"
+      } successfully`,
+
+      category,
+
+    });
+
+  }
+
+);
+
+
+
+// CATEGORY BREADCRUMB
+
+const getCategoryBreadcrumb =
+asyncHandler(
+
+  async(req , res)=>{
+
+    const { slug } =
+    req.params;
+
+
+    // FIND CURRENT CATEGORY
+    let category =
+    await Category.findOne({
+      slug,
+    });
+
+
+    if(!category){
+
+      throw new apiErrr(
+        404,
+        "Category not found"
+      );
+    }
+
+
+    const breadcrumb = [];
+
+
+    // LOOP UNTIL PARENT EXISTS
+    while(category){
+
+      breadcrumb.unshift({
+
+        _id: category._id,
+
+        name: category.name,
+
+        slug: category.slug,
+
+      });
+
+
+      // MOVE TO PARENT
+      if(category.parentCategory){
+
+        category =
+        await Category.findById(
+          category.parentCategory
+        );
+
+      }else{
+
+        category = null;
+
+      }
+
+    }
+
+
+    res.status(200).json({
+
+      success: true,
+
+      breadcrumb,
+
+    });
+
+  }
+
+);
+
+
+
 module.exports = {
   createCategory,
   getAllCategories,
   getSingleCategory,
   updateCategory,
   deleteCategory,
-  getCategoryTree
+  getCategoryTree,
+toggleCategoryStatus,
+getCategoryBreadcrumb,
 }

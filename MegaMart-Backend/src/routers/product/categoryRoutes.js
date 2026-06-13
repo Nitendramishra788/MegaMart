@@ -11,6 +11,8 @@ const {
     updateCategory,
     deleteCategory,
     getCategoryTree,
+    toggleCategoryStatus,
+    getCategoryBreadcrumb,
 } = require("../../controllers/product/categoryController");
 
 
@@ -44,6 +46,20 @@ router.put(
     updateCategory
 );
 
+
+router.patch(
+  "/toggle/:id",
+  protect,
+  admin,
+  toggleCategoryStatus
+);
+
+
+
+router.get(
+  "/breadcrumb/:slug",
+  getCategoryBreadcrumb
+);
 
 // get single cotegory router
 
