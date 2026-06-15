@@ -10,6 +10,7 @@ const {
   getAllProducts,
   getSingleProduct,
   getProductbyCategory,
+  searchProducts
 } = require("../../controllers/product/productController");
 
 
@@ -33,6 +34,14 @@ router.get(
     protect,
     seller,
     getMyProducts
+)
+
+
+// this is part of filtering product 
+
+router.get(
+  "/search",
+  searchProducts,
 )
 
 

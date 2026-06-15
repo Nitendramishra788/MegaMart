@@ -306,10 +306,108 @@ asyncHandler(
 
 );
 
+// SEARCH PRODUCTS
+
+const searchProducts =
+asyncHandler(
+
+  async(req , res)=>{
+
+    const { q } =
+    req.query;
+
+
+    // CHECK EMPTY QUERY
+    if(!q){
+
+      throw new apiErrr(
+        400,
+        "Search query is required"
+      );
+
+    }
+
+
+    // SEARCH PRODUCTS
+    const products =
+    await Product.find({
+
+      status: "approved",
+
+      $or: [
+
+        {
+          title: {
+            $regex: q,
+            $options: "i",
+          },
+        },
+
+        {
+          description: {
+            $regex: q,
+            $options: "i",
+          },
+        },
+
+        {
+          brand: {
+            $regex: q,
+            $options: "i",
+          },
+        },
+
+      ],
+
+    })
+
+    .populate(
+      "category",
+      "name slug"
+    )
+
+    .populate(
+      "seller",
+      "name"
+    )
+
+    .populate(
+      "store",
+      "storeName storeBanner"
+    )
+
+    .populate(
+      "defaultVariant"
+    )
+
+    .sort({
+      createdAt: -1,
+    });
+
+
+    res.status(200).json({
+
+      success: true,
+
+      message:
+      "Products fetched successfully",
+
+      count:
+      products.length,
+
+      products,
+
+    });
+
+  }
+
+);
+
 module.exports = {
   createProduct,
   getMyProducts,
   getAllProducts,
   getSingleProduct,
   getProductbyCategory,
+  searchProducts,
 };
