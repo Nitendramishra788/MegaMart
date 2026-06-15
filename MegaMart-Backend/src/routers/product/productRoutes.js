@@ -42,7 +42,7 @@ router.get(
 router.get(
   "/search",
   searchProducts,
-)
+)   
 
 
 // PUBLIC PRODUCTS

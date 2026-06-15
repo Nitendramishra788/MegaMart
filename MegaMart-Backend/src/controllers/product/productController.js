@@ -141,37 +141,92 @@ const getMyProducts = async (req, res) => {
 
 // here the part of public api
 
-const getAllProducts = async (req, res) => {
-  try {
-    const products = await Product.find({
-      status: "approved"
-    })
+const getAllProducts =
+asyncHandler(
 
-      .populate("store", "storeLogo  storeBanner")
-      .populate("seller", "name")
-      .populate(
-        "category",
-        "name slug"
-      )
-      .populate("defaultVariant")
+  async(req , res)=>{
 
-      .sort({ createdAt: -1 });
+    const { category } =
+    req.query;
+
+
+    // BASE FILTER
+    const filter = {
+      status: "approved",
+    };
+
+
+    // DECLARE VARIABLE
+    let foundCategory;
+
+
+    // CATEGORY FILTER
+    if(category){
+
+      foundCategory =
+      await Category.findOne({
+
+        slug: category,
+
+      });
+
+    }
+
+
+    // APPLY FILTER
+    if(foundCategory){
+
+      filter.category =
+      foundCategory._id;
+
+    }
+
+
+    // FETCH PRODUCTS
+    const products =
+    await Product.find(filter)
+
+    .populate(
+      "category",
+      "name slug"
+    )
+
+    .populate(
+      "seller",
+      "name"
+    )
+
+    .populate(
+      "store",
+      "storeName storeBanner"
+    )
+
+    .populate(
+      "defaultVariant"
+    )
+
+    .sort({
+      createdAt: -1,
+    });
+
 
     res.status(200).json({
+
       success: true,
-      message: "product fetch",
-      count: products.length,
-      products
-    })
 
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-    })
+      message:
+      "Products fetched",
+
+      count:
+      products.length,
+
+      products,
+
+    });
+
   }
-}
 
+);
 
 // get single product details
 
