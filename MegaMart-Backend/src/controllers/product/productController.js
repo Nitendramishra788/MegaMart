@@ -146,7 +146,7 @@ asyncHandler(
 
   async(req , res)=>{
 
-    const { category } =
+    const { category , brand , min , max } =
     req.query;
 
 
@@ -180,6 +180,28 @@ asyncHandler(
       foundCategory._id;
 
     }
+
+    // for the brand base searching 
+    if(brand){
+
+      filter.brand = {
+        $regex:brand,
+        $options:"i"
+      }
+    };
+
+
+
+    // for the price base searching 
+
+    if(min || max){
+
+       filter.price = {};
+
+      filter.price.$gte= Number(max);
+      filter.price.$lte = Number(min);
+    };
+
 
 
     // FETCH PRODUCTS
