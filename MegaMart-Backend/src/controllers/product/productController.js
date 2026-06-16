@@ -147,7 +147,7 @@ asyncHandler(
 
   async(req , res)=>{
 
-    const { category , brand , min , max } =
+    const { category , brand , min , max  ,   sort,} =
     req.query;
 
 
@@ -235,6 +235,51 @@ if(max && isNaN(Number(max))){
 }
 
 
+// SORTING
+
+let sortOption = {
+  createdAt: -1,
+};
+
+
+// LOW TO HIGH
+if(sort === "low"){
+
+  sortOption = {
+    price: 1,
+  };
+
+}
+
+
+// HIGH TO LOW
+if(sort === "high"){
+
+  sortOption = {
+    price: -1,
+  };
+
+}
+
+
+// TOP RATED
+if(sort === "rating"){
+
+  sortOption = {
+    rating: -1,
+  };
+
+}
+
+
+// LATEST
+if(sort === "latest"){
+
+  sortOption = {
+    createdAt: -1,
+  };
+
+}
 
     // FETCH PRODUCTS
     const products =
