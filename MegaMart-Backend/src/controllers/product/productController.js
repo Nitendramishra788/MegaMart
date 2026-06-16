@@ -193,15 +193,46 @@ asyncHandler(
 
 
 
+    if(min && isNaN(Number(min))){
+
+  throw new apiErrr(
+    400,
+    "Invalid min price"
+  );
+
+}
+
+
+if(max && isNaN(Number(max))){
+
+  throw new apiErrr(
+    400,
+    "Invalid max price"
+  );
+
+}
+
     // for the price base searching 
 
     if(min || max){
 
-       filter.price = {};
+  filter.price = {};
 
-      filter.price.$gte= Number(max);
-      filter.price.$lte = Number(min);
-    };
+  if(min){
+
+    filter.price.$gte =
+    Number(min);
+
+  }
+
+  if(max){
+
+    filter.price.$lte =
+    Number(max);
+
+  }
+
+}
 
 
 
