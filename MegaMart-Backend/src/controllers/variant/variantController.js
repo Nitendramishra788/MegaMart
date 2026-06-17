@@ -1,11 +1,13 @@
 const Product = require("../../models/Product");
 const ProductVariant = require("../../models/ProductVariant");
+const asyncHandler = require("../../utils/asyncHandler");
+const apiErrr = require("../../utils/apiErrr");
 
 
 // create product variant 
 
-const createVariant = async (req, res) => {
-    try {
+const createVariant = asyncHandler( async (req, res) => {
+    
         const {
             color,
 
@@ -28,26 +30,35 @@ const createVariant = async (req, res) => {
         );
 
         if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "product not found"
-            })
+
+           throw new  apiErrr(
+                404,
+                "product not found"
+            )
+           
         }
 
         // image setup
 
-        const images = req.files.map(
+        const images = req.files
+    ? req.files.map(file => file.filename)
+    : [];
 
-            (file) => file.filename
+        // Ownership Validation
 
-        );
+        if(product.seller.toString()!== req.user._id.toString()){
+            throw new apiErrr(
+                403,
+            "You are not allowed to manage variants of this product"
+            )
+        }
 
         // create variant here 
 
         const variant = await ProductVariant.create({
             product: product._id,
 
-            seller: req.user._id,
+             seller: product.seller,
 
             color,
 
@@ -61,47 +72,31 @@ const createVariant = async (req, res) => {
 
             images,
 
-            isDefault,
+            isDefault:false,
 
 
         });
 
 
 
-        if (isDefault) {
+       if (variantCount === 0 || isDefault) {
 
-            // REMOVE OLD DEFAULT VARIANT
-            await ProductVariant.updateMany(
-
-                {
-
-                    product: product._id,
-
-                    isDefault: true,
-
-                },
-
-                {
-
-                    isDefault: false,
-
-                }
-
-            );
-
-
-            // SET NEW DEFAULT
-            variant.isDefault = true;
-
-            await variant.save();
-
-
-            // UPDATE PRODUCT
-            product.defaultVariant = variant._id;
-
-            await product.save();
-
+    await ProductVariant.updateMany(
+        {
+            product: product._id,
+            isDefault: true,
+        },
+        {
+            isDefault: false,
         }
+    );
+
+    variant.isDefault = true;
+    await variant.save();
+
+    product.defaultVariant = variant._id;
+    await product.save();
+}
 
 
         res.status(201).json({
@@ -112,14 +107,10 @@ const createVariant = async (req, res) => {
 
 
 
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message,
-        });
-    };
-};
+    
+}
 
+)
 
 // get product variant
 
