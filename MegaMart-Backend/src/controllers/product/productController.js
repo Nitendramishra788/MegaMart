@@ -24,7 +24,7 @@ const createProduct = async (req, res) => {
       title,
       description,
       brand,
-        price,
+      price,
       category,
     } = req.body;
 
@@ -72,7 +72,7 @@ const createProduct = async (req, res) => {
 
       description,
 
-        price,
+      price,
 
       brand,
 
@@ -143,189 +143,210 @@ const getMyProducts = async (req, res) => {
 // here the part of public api
 
 const getAllProducts =
-asyncHandler(
+  asyncHandler(
 
-  async(req , res)=>{
+    async (req, res) => {
 
-    const { category , brand , min , max  ,   sort,} =
-    req.query;
-
-
-    // BASE FILTER
-    const filter = {
-      status: "approved",
-    };
+      const { category, brand, min, max, sort, page,
+        limit, } =
+        req.query;
 
 
-    // DECLARE VARIABLE
-    let foundCategory;
+      // BASE FILTER
+      const filter = {
+        status: "approved",
+      };
 
 
-    // CATEGORY FILTER
-    if(category){
+      // DECLARE VARIABLE
+      let foundCategory;
 
-      foundCategory =
-      await Category.findOne({
 
-        slug: category,
+      // CATEGORY FILTER
+      if (category) {
+
+        foundCategory =
+          await Category.findOne({
+
+            slug: category,
+
+          });
+
+      }
+
+
+      // APPLY FILTER
+      if (foundCategory) {
+
+        filter.category =
+          foundCategory._id;
+
+      }
+
+      // for the brand base searching 
+      if (brand) {
+
+        filter.brand = {
+          $regex: brand,
+          $options: "i"
+        }
+      };
+
+
+
+      if (min && isNaN(Number(min))) {
+
+        throw new apiErrr(
+          400,
+          "Invalid min price"
+        );
+
+      }
+
+
+      if (max && isNaN(Number(max))) {
+
+        throw new apiErrr(
+          400,
+          "Invalid max price"
+        );
+
+      }
+
+      // for the price base searching 
+
+      if (min || max) {
+
+        filter.price = {};
+
+        if (min) {
+
+          filter.price.$gte =
+            Number(min);
+
+        }
+
+        if (max) {
+
+          filter.price.$lte =
+            Number(max);
+
+        }
+
+      }
+
+
+      // SORTING
+
+      let sortOption = {
+        createdAt: -1,
+      };
+
+
+      // LOW TO HIGH
+      if (sort === "low") {
+
+        sortOption = {
+          price: 1,
+        };
+
+      }
+
+
+      // HIGH TO LOW
+      if (sort === "high") {
+
+        sortOption = {
+          price: -1,
+        };
+
+      }
+
+
+      // TOP RATED
+      if (sort === "rating") {
+
+        sortOption = {
+          rating: -1,
+        };
+
+      }
+
+
+      // LATEST
+      if (sort === "latest") {
+
+        sortOption = {
+          createdAt: -1,
+        };
+
+      }
+
+
+      // this is part of paging product 
+
+      const currentPage = Number(page) || 1;
+      const perPage = Number(limit) || 5;
+      const skip = (currentPage - 1) * perPage;
+
+
+
+      const totalProducts = await Product.countDocuments(filter);
+
+      // FETCH PRODUCTS
+      const products =
+        await Product.find(filter)
+
+          .populate(
+            "category",
+            "name slug"
+          )
+
+          .populate(
+            "seller",
+            "name"
+          )
+
+          .populate(
+            "store",
+            "storeName storeBanner"
+          )
+
+          .populate(
+            "defaultVariant"
+          )
+
+          .sort(sortOption)
+
+          .skip(skip)
+
+          .limit(perPage);
+
+      res.status(200).json({
+
+        success: true,
+
+        message:
+          "Products fetched",
+
+        count:
+          products.length,
+        totalProducts,
+
+        currentPage,
+
+        totalPages:
+          Math.ceil(
+            totalProducts / perPage
+          ),
+
+        products,
 
       });
 
     }
 
-
-    // APPLY FILTER
-    if(foundCategory){
-
-      filter.category =
-      foundCategory._id;
-
-    }
-
-    // for the brand base searching 
-    if(brand){
-
-      filter.brand = {
-        $regex:brand,
-        $options:"i"
-      }
-    };
-
-
-
-    if(min && isNaN(Number(min))){
-
-  throw new apiErrr(
-    400,
-    "Invalid min price"
   );
-
-}
-
-
-if(max && isNaN(Number(max))){
-
-  throw new apiErrr(
-    400,
-    "Invalid max price"
-  );
-
-}
-
-    // for the price base searching 
-
-    if(min || max){
-
-  filter.price = {};
-
-  if(min){
-
-    filter.price.$gte =
-    Number(min);
-
-  }
-
-  if(max){
-
-    filter.price.$lte =
-    Number(max);
-
-  }
-
-}
-
-
-// SORTING
-
-let sortOption = {
-  createdAt: -1,
-};
-
-
-// LOW TO HIGH
-if(sort === "low"){
-
-  sortOption = {
-    price: 1,
-  };
-
-}
-
-
-// HIGH TO LOW
-if(sort === "high"){
-
-  sortOption = {
-    price: -1,
-  };
-
-}
-
-
-// TOP RATED
-if(sort === "rating"){
-
-  sortOption = {
-    rating: -1,
-  };
-
-}
-
-
-// LATEST
-if(sort === "latest"){
-
-  sortOption = {
-    createdAt: -1,
-  };
-
-}
-
-    // FETCH PRODUCTS
-    const products =
-    await Product.find(filter)
-
-    .populate(
-      "category",
-      "name slug"
-    )
-
-    .populate(
-      "seller",
-      "name"
-    )
-
-    .populate(
-      "store",
-      "storeName storeBanner"
-    )
-
-    .populate(
-      "defaultVariant"
-    )
-
-    .sort({
-      createdAt: -1,
-    });
-
-
-    res.status(200).json({
-
-      success: true,
-
-      message:
-      "Products fetched",
-
-      count:
-      products.length,
-
-      products,
-
-    });
-
-  }
-
-);
 
 // get single product details
 
@@ -379,183 +400,183 @@ const getSingleProduct = async (req, res) => {
 // get product by category slug
 
 const getProductbyCategory =
-asyncHandler(
+  asyncHandler(
 
-  async(req , res)=>{
+    async (req, res) => {
 
-    const { slug } =
-    req.params;
-
-
-    // FIND CATEGORY
-    const category =
-    await Category.findOne({
-      slug,
-    });
+      const { slug } =
+        req.params;
 
 
-    if(!category){
+      // FIND CATEGORY
+      const category =
+        await Category.findOne({
+          slug,
+        });
 
-      throw new apiErrr(
-        404,
-        "Category not found"
-      );
+
+      if (!category) {
+
+        throw new apiErrr(
+          404,
+          "Category not found"
+        );
+      }
+
+
+      // FIND PRODUCTS
+      const products =
+        await Product.find({
+
+          category:
+            category._id,
+
+          status:
+            "approved"
+
+        })
+
+          .populate(
+            "category",
+            "slug name"
+          )
+
+          .populate(
+            "seller",
+            "name"
+          )
+
+          .populate(
+            "store",
+            "storeName storeBanner"
+          )
+
+          .populate(
+            "defaultVariant"
+          )
+
+          .sort({
+            createdAt: -1,
+          });
+
+
+      res.status(200).json({
+
+        success: true,
+
+        message:
+          "Category products fetched",
+
+        category:
+          category.name,
+
+        count:
+          products.length,
+
+        products,
+
+      });
+
     }
 
-
-    // FIND PRODUCTS
-    const products =
-    await Product.find({
-
-      category:
-      category._id,
-
-      status:
-      "approved"
-
-    })
-
-    .populate(
-      "category",
-      "slug name"
-    )
-
-    .populate(
-      "seller",
-      "name"
-    )
-
-    .populate(
-      "store",
-      "storeName storeBanner"
-    )
-
-    .populate(
-      "defaultVariant"
-    )
-
-    .sort({
-      createdAt: -1,
-    });
-
-
-    res.status(200).json({
-
-      success:true,
-
-      message:
-      "Category products fetched",
-
-      category:
-      category.name,
-
-      count:
-      products.length,
-
-      products,
-
-    });
-
-  }
-
-);
+  );
 
 // SEARCH PRODUCTS
 
 const searchProducts =
-asyncHandler(
+  asyncHandler(
 
-  async(req , res)=>{
+    async (req, res) => {
 
-    const { q } =
-    req.query;
+      const { q } =
+        req.query;
 
 
-    // CHECK EMPTY QUERY
-    if(!q){
+      // CHECK EMPTY QUERY
+      if (!q) {
 
-      throw new apiErrr(
-        400,
-        "Search query is required"
-      );
+        throw new apiErrr(
+          400,
+          "Search query is required"
+        );
+
+      }
+
+
+      // SEARCH PRODUCTS
+      const products =
+        await Product.find({
+
+          status: "approved",
+
+          $or: [
+
+            {
+              title: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+
+            {
+              description: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+
+            {
+              brand: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+
+          ],
+
+        })
+
+          .populate(
+            "category",
+            "name slug"
+          )
+
+          .populate(
+            "seller",
+            "name"
+          )
+
+          .populate(
+            "store",
+            "storeName storeBanner"
+          )
+
+          .populate(
+            "defaultVariant"
+          )
+
+          .sort({
+            createdAt: -1,
+          });
+
+
+      res.status(200).json({
+
+        success: true,
+
+        message:
+          "Products fetched successfully",
+
+        count:
+          products.length,
+
+        products,
+
+      });
 
     }
 
-
-    // SEARCH PRODUCTS
-    const products =
-    await Product.find({
-
-      status: "approved",
-
-      $or: [
-
-        {
-          title: {
-            $regex: q,
-            $options: "i",
-          },
-        },
-
-        {
-          description: {
-            $regex: q,
-            $options: "i",
-          },
-        },
-
-        {
-          brand: {
-            $regex: q,
-            $options: "i",
-          },
-        },
-
-      ],
-
-    })
-
-    .populate(
-      "category",
-      "name slug"
-    )
-
-    .populate(
-      "seller",
-      "name"
-    )
-
-    .populate(
-      "store",
-      "storeName storeBanner"
-    )
-
-    .populate(
-      "defaultVariant"
-    )
-
-    .sort({
-      createdAt: -1,
-    });
-
-
-    res.status(200).json({
-
-      success: true,
-
-      message:
-      "Products fetched successfully",
-
-      count:
-      products.length,
-
-      products,
-
-    });
-
-  }
-
-);
+  );
 
 module.exports = {
   createProduct,

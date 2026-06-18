@@ -53,6 +53,11 @@ const createVariant = asyncHandler( async (req, res) => {
             )
         }
 
+
+        const variantCount = await ProductVariant.countDocuments({
+    product: product._id,
+});
+
         // create variant here 
 
         const variant = await ProductVariant.create({
