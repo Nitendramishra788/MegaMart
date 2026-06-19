@@ -1,86 +1,82 @@
 const User = require("../../models/User");
+const asyncHandler = require("../../utils/asyncHandler");
+const apiErrr = require("../../utils/apiErrr");
 
 // get the all seller request 
 
-const getSellerRequests = async(req, res)=>{
-    try{
-        const request = await User.find({
-            sellerRequestStatus: "pending",
-        }).select("-password");
+const getSellerRequests = asyncHandler(async (req, res) => {
 
-        res.status(200).json({
-            success:true,
-            request
-        })
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err.message,
-        })
-    }
-}
+    const request = await User.find({
+        sellerRequestStatus: "pending",
+    }).select("-password");
+
+    res.status(200).json({
+        success: true,
+        request
+    })
+
+});
 
 // aprovel request 
 
-const approveSeller = async(req, res)=>{
-    
-    try{
-        const user = await User.findById(req.params.id);
+const approveSeller = asyncHandler(async (req, res) => {
 
-        if(!user){
-            res.status(404).json({
-                success:false,
-                message:"user not found"
-            })
-        }
 
-        user.role="seller";
-        user.sellerRequestStatus="approved";
+    const user = await User.findById(req.params.id);
 
-        await user.save();
+    if (!user) {
+        throw new apiErrr(
+            404,
+            "User not found..!"
+        )
 
-        res.status(200).json({
-            success:true,
-            message:"seller approved successfully",
-        })
-
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err.message,
-        })
     }
-}
+
+    if (user.sellerRequestStatus !== "pending") {
+        throw new apiErrr(
+            400,
+            "Request already processed"
+        );
+    }
+
+    user.role = "seller";
+    user.sellerRequestStatus = "approved";
+
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "seller approved successfully",
+    })
+
+
+});
 
 
 // approvel rejected 
 
-const rejectedSeller = async(req, res)=>{
-    try{
-        const user = await User.findById(req.params.id);
+const rejectedSeller = asyncHandler(async (req, res) => {
 
-        if(!user){
-            res.status(404).json({
-                success:false,
-                message:"user not found",
-            })
-        }
+    const user = await User.findById(req.params.id);
 
-        
-        user.sellerRequestStatus="rejected";
-        await user.save();
+    if (!user) {
+        throw new apiErrr(
+            404,
+            "User not found...!"
+        )
 
-        res.status(200).json({
-            success:true,
-            message:"seller request rejected",
-        })
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            messsage:err.message
-        })
     }
-}
+
+
+    user.sellerRequestStatus = "rejected";
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "seller request rejected",
+    })
+
+});
 
 
 module.exports = {
