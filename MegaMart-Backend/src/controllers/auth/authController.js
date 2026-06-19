@@ -3,21 +3,26 @@ const generateToken = require('../../utils/generateToken');
 
 const bcrypt = require('bcryptjs');
 
+const asyncHandler = require("../../utils/asyncHandler");
+const apiErrr = require("../../utils/apiErrr")
+const sanitizeUser = require("../../utils/sanitizeUser");
+
+
 // Register a new user
 
-const signUp = async (req , res)=>{
+const signUp =  asyncHandler( async (req , res)=>{
     const {name , email , password}= req.body;
 
-    try{
+    
         // Check if user already exists
         const userExists = await User.findOne({email});
 
         if(userExists){
-            return res.status(400).json({
-                success:false,
-                message:"User already exists"
-
-            });
+            throw new apiErrr(
+                400,
+                "User already exists"
+            )
+           
         }
 
         // Hash the password
@@ -35,30 +40,27 @@ const signUp = async (req , res)=>{
         success:true,
         message:"sign up successful",
         token:generateToken(user._id),
-        user,
+        user:sanitizeUser(user),
       });  
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            error:err.message
-        })
-    }
-};
+   
+});
 
 
 // login user
 
-const login = async (req , res)=>{
+const login =  asyncHandler( async (req , res)=>{
     const {email , password } = req.body;
 
-    try{
+    
         const user = await User.findOne({email});
 
         if(!user){
-            return res.status(400).json({
-                success:false,
-                message:"invalid email or password"
-            })
+
+            throw new apiErrr(
+                400,
+                "invalid email or password"
+            );
+            
         };
 
         const isMatch = await bcrypt.compare(
@@ -67,26 +69,24 @@ const login = async (req , res)=>{
         );
 
        if(!isMatch){
-        return res.status(400).json({
-            success:false,
-            message:"invalid email or password"
-        })
+
+        throw new apiErrr(
+            400,
+            "invalid email or password"
+        );
+       
        };
 
        res.status(200).json({
         success:true,
         message:"login successful",
         token:generateToken(user._id),
-        user,
+        user: sanitizeUser(user),
        })
-}catch(err){
-    res.status(500).json({
-        success:false,
-        error:err.message
-    })
-}
 
-}
+
+
+});
 
 
 // get user profile
@@ -95,7 +95,7 @@ const getMe = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "User profile fetched successfully",
-    user: req.user,
+    user: sanitizeUser(req.user),
   });
 
 };
