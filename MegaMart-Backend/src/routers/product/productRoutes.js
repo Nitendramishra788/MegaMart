@@ -49,13 +49,16 @@ router.get(
 router.get("/", getAllProducts);
 
 
-// SINGLE PRODUCT
-router.get("/:id", getSingleProduct);
-
 router.get(
   "/category/:slug",
   getProductbyCategory,
 );
+
+
+// SINGLE PRODUCT
+router.get("/:id", getSingleProduct);
+
+
 
 
 

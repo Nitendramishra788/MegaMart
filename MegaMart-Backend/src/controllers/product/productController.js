@@ -13,6 +13,11 @@ const apiErrr =
 const asyncHandler = require("../../utils/asyncHandler");
 const { populate } = require("../../models/User");
 
+const {
+
+  getProductDetailsService
+} = require("../../services/productService");
+
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
 
@@ -350,53 +355,40 @@ const getAllProducts =
 
 // get single product details
 
-const getSingleProduct = async (req, res) => {
-  try {
-    const product = await Product.findById(
-      req.params.id,
+const getSingleProduct = asyncHandler( async (req, res) => {
+  
+   const data = await getProductDetailsService(req.params.id);
+
+     
+   if(!data){
+    throw new apiErrr(
+      404,
+      "product not found"
     )
+   }
 
-      .populate("defaultVariant")
-      .populate("store")
-      .populate("seller", "name email")
-      .populate(
-        "category",
-        "name slug"
-      )
+    
 
-    if (!product) {
-      res.status(404).josn({
-        success: false,
-        message: "not found product",
-      })
+    // only approved product show for the public
 
-    }
-
-    // on;y approved product show for the public
-
-    if (product.status !== "approved") {
-      res.status(403).json({
-        success: false,
-        message: "product not available",
-      })
-    }
+    if (data.product.status !== "approved") {
+    throw new apiErrr(
+      403,
+      "Product not available"
+    );
+  }
 
 
     res.status(200).json({
       success: true,
-      product,
+      ...data,
     });
 
 
 
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: err.message,
-    })
-  }
 
-}
+})
+
 // get product by category slug
 
 const getProductbyCategory =
@@ -586,3 +578,5 @@ module.exports = {
   getProductbyCategory,
   searchProducts,
 };
+
+
