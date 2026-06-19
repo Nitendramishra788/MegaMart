@@ -1,18 +1,22 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
+const asyncHandler = require("../../utils/asyncHandler");
+const apiErrr = require("../../utils/apiErrr");
+const sanitizeUser = require("../../utils/sanitizeUser");
 
-const updateProfile = async (req, res) => {
-    try {
+const updateProfile = asyncHandler( async (req, res) => {
+   
         const user = await User.findById(req.user._id);
 
         // if user is not found
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User Not Found",
 
-            })
-        }
+            throw new apiErrr(
+                404,
+                "User Not Found"
+            );
+           
+        };
 
         // update the user profile
 
@@ -32,32 +36,28 @@ const updateProfile = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "profile updated successfully",
-            user: updatedUser,
+            user: sanitizeUser(updatedUser),
         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        })
-    }
-};
+   
+});
 
 
 // change password function
 
-const changePassword = async (req, res) => {
-    try {
+const changePassword = asyncHandler( async (req, res) => {
+   
         const { oldPassword, newPassword } = req.body;
 
         const user = await User.findById(req.user._id);
         // if user is not found
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User Not Found",
-            })
-        }
+            throw new apiErrr(
+                404,
+                "User Not Found"
+            );
+           
+        };
 
         // isMatch old password
         const isMatch = await bcrypt.compare(
@@ -68,20 +68,21 @@ const changePassword = async (req, res) => {
         // if old password does not match
 
         if (!isMatch) {
-            return res.status(400).json({
-                success: false,
-                message: "Old password is incorrect",
-            })
+            throw new apiErrr(
+                400,
+                "Old password is incorrect"
+            )
+           
         }
 
         // if new password is same as old password
 
         if (oldPassword === newPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "New password must be different from old password",
-
-            })
+            throw new apiErrr(
+                400,
+                "New password must be different from old password"
+            );
+             
         };
 
         // hash new password
@@ -100,30 +101,26 @@ const changePassword = async (req, res) => {
 
         })
 
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message,
-        })
-    }
-}
+   
+});
 
 
 // add multiple addresses function
 
-const addAddress = async (req, res) => {
-    try {
+const addAddress = asyncHandler( async (req, res) => {
+   
         const user = await User.findById(req.user._id);
 
         // if user is not found
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User Not Found",
-            })
+            throw new apiErrr(
+                404,
+                "User Not Found"
+            )
+            
         }
 
-        const { fullName, phone, piccode, city, state, country, addressLine , isDefault } = req.body;
+        const { fullName, phone, pincode, city, state, country, addressLine , isDefault } = req.body;
 
         // default address
         if(isDefault){
@@ -136,7 +133,7 @@ const addAddress = async (req, res) => {
         const newAddress = {
             fullName,
             phone,
-            piccode,
+            pincode,
             city,
             state,
             country,
@@ -156,15 +153,9 @@ const addAddress = async (req, res) => {
 
 
 
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message,
-        })
-    }
 
 
-}
+});
 
 
 module.exports = {
