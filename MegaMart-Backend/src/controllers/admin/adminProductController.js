@@ -1,18 +1,29 @@
 const Product = require("../../models/Product");
+const apiErrr = require("../../utils/apiErrr");
+const asyncHandler = require("../../utils/asyncHandler");
 
 // get pending product 
 
-const getPendingProduct = async(req, res)=>{
-    try{
+const getPendingProduct  = asyncHandler( async(req, res)=>{
+  
 
         const products = await  Product.find({
             status:"pending",
         })
 
-        .populate("seller" , "name ,email")
+        .populate("seller" , "name email")
         .populate("store" , "storeName")
         .populate("defaultVariant")
         .sort({ createdAt: -1 });
+
+
+        if(products.length === 0){
+            throw new apiErrr(
+                404,
+                "product not available yet ..!"
+            );
+          
+        }
 
         res.status(200).json({
             success:true,
@@ -22,37 +33,34 @@ const getPendingProduct = async(req, res)=>{
         });
         
 
-        if(!products){
-            res.status(404).json({
-                success:false,
-                message:"product available yet"
-            })
-        }
+        
 
 
-
-
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err.message
-        });
-    }
-}
+    
+});
 
 // give approval product 
 
-const approvedProduct = async(req , res)=>{
-    try{
+const approvedProduct = asyncHandler(async(req , res)=>{
+   
         const product = await Product.findById(
             req.params.id,
         )
 
         if(!product){
-            res.status(404).json({
-                success:true,
-                message:"product not found"
-            })
+            throw new apiErrr(
+                404,
+                "product not found...!"
+            )
+
+            
+        }
+
+        if(product.status !== "pending"){
+          throw new apiErrr(
+              400,
+            "Product already processed"
+          )
         }
 
         product.status = "approved"
@@ -64,29 +72,30 @@ const approvedProduct = async(req , res)=>{
             message:"product approved successFull",
             product
         })
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err.message,
-        })
-    }
-}
+   
+});
 
 
 // Reject approval request 
 
-const rejectedProduct = async(req, res)=>{
-    try{
+const rejectedProduct = asyncHandler(async(req, res)=>{
+  
         const product = await Product.findById(
             req.params.id
         )
 
         if(!product){
-            res.status(404).json({
-                success:false,
-                message:"product not found",
-            })
+
+            throw new apiErrr(
+                404,
+                "product not found yet ..!!"
+            )
+        
         }
+
+       if(product.status !== "pending"){
+   throw new apiErrr(400, "Product already processed");
+}
 
         product.status = "rejected";
 
@@ -98,13 +107,8 @@ const rejectedProduct = async(req, res)=>{
             product
          })
 
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err.message,
-        })
-    }
-}
+   
+});
 
 
 module.exports = {
