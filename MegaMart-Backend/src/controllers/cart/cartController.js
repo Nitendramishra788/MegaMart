@@ -93,6 +93,98 @@ const addCart = asyncHandler(async (req, res) => {
   });
 });
 
+
+
+const getCart = asyncHandler(
+  async (req, res) => {
+
+    const cart = await Cart.findOne({
+      user: req.user._id,
+    })
+      .populate(
+        "items.product",
+        "title brand price"
+      )
+      .populate(
+        "items.variant",
+        "price stock attributes"
+      );
+
+    // EMPTY CART
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Cart is empty",
+        cart: {
+          items: [],
+          totalItems: 0,
+          totalPrice: 0,
+        },
+      });
+    }
+
+    // CALCULATION VARIABLES
+
+    let totalPrice = 0;
+    let totalItems = 0;
+
+    // FORMAT ITEMS + CALCULATE TOTALS
+
+    const formattedItems = cart.items.map(
+      (item) => {
+
+        const product = item.product;
+        const variant = item.variant;
+
+        const itemPrice =
+          (variant?.price || 0) *
+          item.quantity;
+
+        totalPrice += itemPrice;
+        totalItems += item.quantity;
+
+        return {
+          _id: item._id,
+
+          product: {
+            _id: product?._id,
+            title: product?.title,
+            brand: product?.brand,
+          },
+
+          variant: {
+            _id: variant?._id,
+            price: variant?.price,
+            stock: variant?.stock,
+            attributes:
+              variant?.attributes,
+          },
+
+          quantity: item.quantity,
+
+          itemTotal: itemPrice,
+        };
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Cart fetched successfully",
+
+      cart: {
+        items: formattedItems,
+        totalItems,
+        totalPrice,
+      },
+    });
+
+  }
+);
+
+
 module.exports = {
   addCart,
+  getCart, 
 };

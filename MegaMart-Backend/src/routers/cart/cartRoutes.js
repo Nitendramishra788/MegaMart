@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   addCart,
+  getCart
 } = require("../../controllers/cart/cartController");
 
 const protect = require("../../middlewares/authMiddleware");
@@ -12,5 +13,12 @@ router.post(
   protect,
   addCart
 );
+
+
+router.get(
+    "/get-cart",
+    protect,
+    getCart
+)
 
 module.exports = router;
