@@ -9,6 +9,7 @@ const storeRoutes = require("./routers/store/storeRoutes");
 const productRouter= require("./routers/product/productRoutes");
 const variantRoutes = require("./routers/variant/variantRoutes");
 const categoryRoutes = require("./routers/product/categoryRoutes");
+const cartRoutes = require("./routers/cart/cartRoutes");
 
 
 // ERROR MIDDLEWARE (IMPORTANT)
@@ -42,6 +43,7 @@ app.use("/api/store" , storeRoutes);
 app.use("/api/product" , productRouter);
 app.use("/api/variant" , variantRoutes);
 app.use("/api/category" , categoryRoutes);
+app.use("/api/cart" , cartRoutes);
 
 
 app.get('/', (req , res)=>{
