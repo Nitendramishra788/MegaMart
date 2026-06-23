@@ -3,7 +3,8 @@ const router = express.Router();
 
 const {
   addCart,
-  getCart
+  getCart,
+  updateCart,
 } = require("../../controllers/cart/cartController");
 
 const protect = require("../../middlewares/authMiddleware");
@@ -19,6 +20,12 @@ router.get(
     "/get-cart",
     protect,
     getCart
+)
+
+router.put(
+  "/update-cart",
+  protect,
+  updateCart,
 )
 
 module.exports = router;

@@ -184,7 +184,83 @@ const getCart = asyncHandler(
 );
 
 
+// this is part of update api
+
+const updateCart = asyncHandler(
+  async (req, res) => {
+
+    const { variantId, quantity } = req.body;
+
+    // quantity validation
+    if (quantity < 1) {
+      throw new apiErrr(
+        400,
+        "Quantity must be greater than 0"
+      );
+    }
+
+    // find variant
+    const variant = await Variant.findById(
+      variantId
+    );
+
+    if (!variant) {
+      throw new apiErrr(
+        404,
+        "Variant not found"
+      );
+    }
+
+    // stock check
+    if (quantity > variant.stock) {
+      throw new apiErrr(
+        400,
+        "Insufficient stock"
+      );
+    }
+
+    // find cart
+    const cart = await Cart.findOne({
+      user: req.user._id,
+    });
+
+    if (!cart) {
+      throw new apiErrr(
+        404,
+        "Cart not found"
+      );
+    }
+
+    // find cart item
+    const existingItem = cart.items.find(
+      (item) =>
+        item.variant.toString() ===
+        variant._id.toString()
+    );
+
+    if (!existingItem) {
+      throw new apiErrr(
+        404,
+        "Item not found in cart"
+      );
+    }
+
+    // update quantity
+    existingItem.quantity = quantity;
+
+    await cart.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Cart updated successfully",
+      cart,
+    });
+
+  }
+);
+
 module.exports = {
   addCart,
-  getCart, 
+  getCart,
+  updateCart, 
 };
