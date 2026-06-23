@@ -259,8 +259,62 @@ const updateCart = asyncHandler(
   }
 );
 
+// this is part of remove cart api
+
+const removeCart = asyncHandler(
+  async (req, res) => {
+    const { variantId } = req.body;
+
+    const variant = await Variant.findById(variantId);
+
+    if (!variant) {
+      throw new apiErrr(
+        404,
+        "variant not found..!"
+      )
+    };
+
+    const cart = await Cart.findOne({ user: req.user._id });
+
+    if (!cart) {
+      throw new apiErrr(
+        404,
+        "cart not found..!"
+      );
+    };
+
+    const existItem = cart.items.find(
+      (item) =>
+        item.variant.toString() ===
+        variant._id.toString()
+    );
+
+    if (!existItem) {
+      throw new apiErrr(
+        404,
+        "Item not found...!"
+      )
+    } else {
+      cart.items = cart.items.filter(
+        item =>
+          item.variant.toString() !==
+          variant._id.toString()
+      );
+
+      await cart.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Item removed from cart",
+        cart,
+      });
+    }
+  }
+);
+
 module.exports = {
   addCart,
   getCart,
-  updateCart, 
+  updateCart,
+  removeCart
 };
