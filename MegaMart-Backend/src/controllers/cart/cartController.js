@@ -312,9 +312,40 @@ const removeCart = asyncHandler(
   }
 );
 
+
+// this is all clear cart api 
+
+const allClearCart = asyncHandler(
+  async(req , res)=>{
+
+    const cart = await Cart.findOne({user: req.user._id});
+
+       if(!cart){
+      throw new apiErrr(
+        404,
+        "Data not found"
+      )
+    }else{
+      cart.items = [];
+    }
+
+    
+    await cart.save();
+
+
+    res.status(200).json({
+      success: true,
+      message: "Cart all data clear succesfuly..!",
+      cart
+    })
+    
+  }
+);
+
 module.exports = {
   addCart,
   getCart,
   updateCart,
-  removeCart
+  removeCart,
+  allClearCart
 };
