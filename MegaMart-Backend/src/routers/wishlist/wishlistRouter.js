@@ -5,7 +5,7 @@ const router = express.Router();
 const {
     addWishlist,
     getWishlist,
-
+    removeitem,
 } = require("../../controllers/wishlist/wishlistController");
 const protect = require("../../middlewares/authMiddleware");
 
@@ -20,6 +20,13 @@ router.get(
     "/get-wishlist",
     protect,
     getWishlist,
+);
+
+
+router.put(
+    "/remove-wishlist",
+    Protect,
+    removeitem
 );
 
 module.exports = router ;
