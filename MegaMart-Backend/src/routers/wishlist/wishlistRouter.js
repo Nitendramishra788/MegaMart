@@ -6,6 +6,7 @@ const {
     addWishlist,
     getWishlist,
     removeitem,
+    wishlistAllClear,
 } = require("../../controllers/wishlist/wishlistController");
 const protect = require("../../middlewares/authMiddleware");
 
@@ -23,10 +24,16 @@ router.get(
 );
 
 
-router.put(
+router.delete(
     "/remove-wishlist",
     Protect,
     removeitem
+);
+
+router.delete(
+    "/clear-wishlist",
+    Protect,
+    wishlistAllClear
 );
 
 module.exports = router ;

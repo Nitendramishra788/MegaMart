@@ -196,8 +196,36 @@ const removeitem = asyncHandler(
     }
   }
 );
+
+
+// wishlist all clear items api...!
+
+const wishlistAllClear = asyncHandler(
+    async(req, res)=>{
+        const wishlist = await Wishlist.findOne({user: req.user._id});
+
+        if(!wishlist){
+            throw new apiErrr(
+                404,
+                "items not found for clearing..!"
+            )
+        }else{
+            wishlist.items=[];
+        }
+
+        await wishlist.save();
+
+        res.status(200).json({
+            success:true,
+            message:"wishlist all data clear...!",
+            wishlist,
+        });
+    }
+);
+
 module.exports = {
     addWishlist,
     getWishlist,
     removeitem,
+    wishlistAllClear,
 };
