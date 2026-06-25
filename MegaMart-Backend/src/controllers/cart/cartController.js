@@ -68,7 +68,7 @@ const addCart = asyncHandler(async (req, res) => {
     // quantity update
     existingItem.quantity += quantity;
 
-    // optional stock re-check
+    //  stock re-check
     if (existingItem.quantity > variant.stock) {
       throw new apiErrr(
         400,

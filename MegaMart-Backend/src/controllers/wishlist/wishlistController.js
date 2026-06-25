@@ -3,6 +3,7 @@ const Product = require("../../models/Product");
 const Wishlist = require("../../models/Wishlist");
 const asyncHandler = require("../../utils/asyncHandler");
 const apiErrr = require("../../utils/apiErrr");
+const Cart = require("../../models/Cart");
 
 const addWishlist = asyncHandler(async (req, res) => {
     const { variantId } = req.body;
@@ -137,10 +138,108 @@ const getWishlist = asyncHandler(
 
 // remove wishlist item api..!
 const removeitem = asyncHandler(
+    async (req, res) => {
+
+        const { variantId } = req.body;
+
+        const variant = await Variant.findById(
+            variantId
+        );
+
+        if (!variant) {
+            throw new apiErrr(
+                404,
+                "variant not found...!"
+            );
+        }
+
+        const wishlist = await Wishlist.findOne({
+            user: req.user._id
+        });
+
+        if (!wishlist) {
+            throw new apiErrr(
+                404,
+                "wishlist not found..!"
+            );
+        }
+
+        // check wishlist exist OR not
+
+        const existItem = wishlist.items.find(
+            (item) =>
+                item.variant.toString() ===
+                variant._id.toString()
+        );
+
+        if (!existItem) {
+
+            throw new apiErrr(
+                404,
+                "wishlist item not found..!"
+            );
+
+        } else {
+
+            wishlist.items = wishlist.items.filter(
+                (item) =>
+                    item.variant.toString() !==
+                    variant._id.toString()
+            );
+
+            await wishlist.save();
+
+            res.status(200).json({
+                success: true,
+                message: "wishlist item remove",
+                wishlist,
+            });
+        }
+    }
+);
+
+
+// wishlist all clear items api...!
+
+const wishlistAllClear = asyncHandler(
+    async (req, res) => {
+        const wishlist = await Wishlist.findOne({ user: req.user._id });
+
+        if (!wishlist) {
+            throw new apiErrr(
+                404,
+                "items not found for clearing..!"
+            )
+        } else {
+            wishlist.items = [];
+        }
+
+        await wishlist.save();
+
+        res.status(200).json({
+            success: true,
+            message: "wishlist all data clear...!",
+            wishlist,
+        });
+    }
+);
+
+// this is part of cart to wishlist api..!
+
+const wishlistToCart = asyncHandler(
   async (req, res) => {
 
-    const { variantId } = req.body;
+    const { variantId, quantity = 1 } = req.body;
 
+    // validate quantity
+    if (quantity < 1) {
+      throw new apiErrr(
+        400,
+        "Quantity must be greater than 0"
+      );
+    }
+
+    // find variant
     const variant = await Variant.findById(
       variantId
     );
@@ -148,79 +247,106 @@ const removeitem = asyncHandler(
     if (!variant) {
       throw new apiErrr(
         404,
-        "variant not found...!"
+        "Variant not found"
       );
     }
 
+    // check stock
+    if (variant.stock < quantity) {
+      throw new apiErrr(
+        400,
+        "Insufficient stock"
+      );
+    }
+
+    // find wishlist
     const wishlist = await Wishlist.findOne({
-      user: req.user._id
+      user: req.user._id,
     });
 
     if (!wishlist) {
       throw new apiErrr(
         404,
-        "wishlist not found..!"
+        "Wishlist not found"
       );
     }
 
-    // check wishlist exist OR not
-
-    const existItem = wishlist.items.find(
+    // check item in wishlist
+    const wishlistItem = wishlist.items.find(
       (item) =>
         item.variant.toString() ===
         variant._id.toString()
     );
 
-    if (!existItem) {
-
+    if (!wishlistItem) {
       throw new apiErrr(
         404,
-        "wishlist item not found..!"
+        "Item not found in wishlist"
       );
+    }
+
+    // find cart
+    let cart = await Cart.findOne({
+      user: req.user._id,
+    });
+
+    // create cart if not exists
+    if (!cart) {
+      cart = await Cart.create({
+        user: req.user._id,
+        items: [],
+      });
+    }
+
+    // check existing cart item
+    const existingItem = cart.items.find(
+      (item) =>
+        item.variant.toString() ===
+        variant._id.toString()
+    );
+
+    if (existingItem) {
+
+      const newQuantity =
+        existingItem.quantity + quantity;
+
+      if (newQuantity > variant.stock) {
+        throw new apiErrr(
+          400,
+          "Requested quantity exceeds available stock"
+        );
+      }
+
+      existingItem.quantity = newQuantity;
 
     } else {
 
-      wishlist.items = wishlist.items.filter(
-        (item) =>
-          item.variant.toString() !==
-          variant._id.toString()
-      );
-
-      await wishlist.save();
-
-      res.status(200).json({
-        success: true,
-        message: "wishlist item remove",
-        wishlist,
+      cart.items.push({
+        product: variant.product,
+        variant: variant._id,
+        quantity,
       });
+
     }
+
+    await cart.save();
+
+    // remove item from wishlist
+    wishlist.items = wishlist.items.filter(
+      (item) =>
+        item.variant.toString() !==
+        variant._id.toString()
+    );
+
+    await wishlist.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Item moved to cart successfully",
+      cart,
+    });
+
   }
-);
-
-
-// wishlist all clear items api...!
-
-const wishlistAllClear = asyncHandler(
-    async(req, res)=>{
-        const wishlist = await Wishlist.findOne({user: req.user._id});
-
-        if(!wishlist){
-            throw new apiErrr(
-                404,
-                "items not found for clearing..!"
-            )
-        }else{
-            wishlist.items=[];
-        }
-
-        await wishlist.save();
-
-        res.status(200).json({
-            success:true,
-            message:"wishlist all data clear...!",
-            wishlist,
-        });
-    }
 );
 
 module.exports = {
@@ -228,4 +354,5 @@ module.exports = {
     getWishlist,
     removeitem,
     wishlistAllClear,
+    wishlistToCart,
 };

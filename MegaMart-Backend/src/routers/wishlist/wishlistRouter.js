@@ -7,6 +7,7 @@ const {
     getWishlist,
     removeitem,
     wishlistAllClear,
+    wishlistToCart,
 } = require("../../controllers/wishlist/wishlistController");
 const protect = require("../../middlewares/authMiddleware");
 
@@ -34,6 +35,14 @@ router.delete(
     "/clear-wishlist",
     Protect,
     wishlistAllClear
+);
+
+// this is wishlist to cart router
+
+router.post(
+    "/wishlist-cart",
+    Protect,
+    wishlistToCart,
 );
 
 module.exports = router ;
