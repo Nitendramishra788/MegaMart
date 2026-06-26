@@ -84,7 +84,31 @@ const createAddress = asyncHandler(
     }
 );
 
+// get address api 
+
+const getAddress = asyncHandler(
+    async(req , res )=>{
+        const userId = req.user?._id;
+
+        const  addresss = await Address.find({
+        user: userId
+    })
+    .sort({ isDefault: -1, createdAt: -1 });
+
+
+    res.status(200).json({
+        success: true,
+        message:"all addresss fetch",
+        addresss,
+    })
+    
+    }
+
+    
+)
+
 
 module.exports = {
     createAddress,
+    getAddress,
 }

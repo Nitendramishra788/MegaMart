@@ -6,6 +6,7 @@ const router = express.Router();
 
 const {
 createAddress,
+getAddress,
 } = require("../../controllers/address/addressController");
 
 router.post(
@@ -13,6 +14,12 @@ router.post(
     Protect,
     createAddress,
 );
+
+router.get(
+    "/get-addresses",
+    Protect,
+    getAddress
+)
 
 
 module.exports = router;
