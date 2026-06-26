@@ -7,6 +7,7 @@ const router = express.Router();
 const {
 createAddress,
 getAddress,
+updateAddress
 } = require("../../controllers/address/addressController");
 
 router.post(
@@ -20,6 +21,12 @@ router.get(
     Protect,
     getAddress
 )
+
+router.put(
+    "/update-address/:addressId",
+    Protect,
+    updateAddress,
+);
 
 
 module.exports = router;
