@@ -231,12 +231,63 @@ const destroyAddress = asyncHandler(
         address,
        })
 }
-)
+);
 
+const setDefaultAddress = asyncHandler(
+    async (req, res) => {
+
+        const { addressId } = req.params;
+        const userId = req.user._id;
+
+        // check ownership
+
+        const address = await Address.findOne({
+            _id: addressId,
+            user: userId,
+        });
+
+        if (!address) {
+            throw new apiErrr(
+                404,
+                "Address not found..!"
+            );
+        }
+
+        // already default
+
+        if (address.isDefault) {
+            throw new apiErrr(
+                409,
+                "Address is already default."
+            );
+        }
+
+        // remove old default address
+
+        await Address.updateMany(
+            { user: userId },
+            { isDefault: false }
+        );
+
+        // set selected address as default
+
+        address.isDefault = true;
+
+        await address.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Default address updated successfully.",
+            address,
+        });
+
+    }
+);
 
 module.exports = {
     createAddress,
     getAddress,
     updateAddress,
     destroyAddress,
+    setDefaultAddress,
 }

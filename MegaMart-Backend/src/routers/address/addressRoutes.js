@@ -9,6 +9,7 @@ createAddress,
 getAddress,
 updateAddress,
 destroyAddress,
+setDefaultAddress
 } = require("../../controllers/address/addressController");
 
 router.post(
@@ -33,6 +34,12 @@ router.delete(
     "/delete-address/:addressId",
     Protect,
     destroyAddress,
+);
+
+router.put(
+    "/set-default/:addressId",
+    Protect,
+    setDefaultAddress
 );
 
 
