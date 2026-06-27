@@ -169,8 +169,74 @@ const updateAddress = asyncHandler(
 );
 
 
+// this this part of destroy address part 
+
+const destroyAddress = asyncHandler(
+    async(req , res)=>{
+        const {addressId} = req.params;
+
+        // find user ID
+        const userId = req.user?._id;
+        if(!userId){
+            throw new apiErrr(
+                404,
+                "Unauthorized user"
+            )
+        };
+
+    // check ownership 
+
+        const address = await Address.findOne({
+            _id: addressId,
+            user:userId,
+        });
+
+        if(!address){
+            throw new apiErrr(
+                404,
+                "you are not a owner...!"
+            )
+        };
+
+        // delete logic
+
+        // address count 
+
+        const addressCount = await Address.countDocuments({
+            user:userId,
+        });
+
+       if(addressCount==1){
+        throw new apiErrr(
+            400,
+            "you cannot delete default address please add another firts..!"
+        )
+       };
+
+       if(addressCount>1 && address.isDefault==true){
+            throw new apiErrr(
+                400,
+                "please set another address deafult first..!",
+            )
+       };
+
+       if(addressCount>1 && address.isDefault==false){
+        await Address.findByIdAndDelete(addressId);
+       };
+
+       
+       res.status(200).json({
+        success: true,
+        message: "address deleted successful..",
+        address,
+       })
+}
+)
+
+
 module.exports = {
     createAddress,
     getAddress,
     updateAddress,
+    destroyAddress,
 }

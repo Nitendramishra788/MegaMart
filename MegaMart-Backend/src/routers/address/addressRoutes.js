@@ -7,7 +7,8 @@ const router = express.Router();
 const {
 createAddress,
 getAddress,
-updateAddress
+updateAddress,
+destroyAddress,
 } = require("../../controllers/address/addressController");
 
 router.post(
@@ -26,6 +27,12 @@ router.put(
     "/update-address/:addressId",
     Protect,
     updateAddress,
+);
+
+router.delete(
+    "/delete-address/:addressId",
+    Protect,
+    destroyAddress,
 );
 
 
