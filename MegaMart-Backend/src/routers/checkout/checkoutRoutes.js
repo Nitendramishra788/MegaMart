@@ -7,7 +7,7 @@ const {
 } = require("../../controllers/checkout/checkoutController");
 
 router.get(
-    "/checkout/review",
+    "/review",
     Protect,
     reviewCheckout
 );

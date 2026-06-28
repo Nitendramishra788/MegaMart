@@ -43,7 +43,7 @@ for (const item of cart.items) {
     }
 
     // Variant Active?
-    if (!variant.status) {
+    if (!variant.isDefault) {
         throw new apiErrr(
             400,
             "Variant is currently unavailable."
