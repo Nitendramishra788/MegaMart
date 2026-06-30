@@ -22,6 +22,12 @@ const orderItemSchema = new mongoose.Schema(
       trim: true,
     },
 
+    
+    brand: {
+    type: String,
+    default: "",
+},
+
     sku: {
       type: String,
       required: true,
