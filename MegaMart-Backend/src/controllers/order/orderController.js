@@ -7,11 +7,17 @@ const Product = require("../../models/Product");
 const calculateShippingCharge = require("../../utils/calculateShipping");
 const Oder = require("../../models/Order");
 
+// this is part of Mongoose Transsaction
+const mongoose = require("mongoose");
+
+
 // create product business logic
 
 const createOder = asyncHandler(
     async (req, res) => {
-
+    const session = await mongoose.startSession();
+    try{
+        session.startTransaction();
         // find user
         const userId = req.user._id;
         let subTotal = 0;
@@ -27,7 +33,7 @@ const createOder = asyncHandler(
         // find cart
         const cart = await Cart.findOne({
             user: userId,
-        });
+        }).session(session);
 
         if (!cart || cart.items.length === 0) {
             throw new apiErrr(
@@ -41,7 +47,7 @@ const createOder = asyncHandler(
         for (const item of cart.items) {
 
             // validate variant
-            const variant = await Variant.findById(item.variant);
+            const variant = await Variant.findById(item.variant).session(session);
 
             if (!variant) {
                 throw new apiErrr(
@@ -59,7 +65,7 @@ const createOder = asyncHandler(
             }
 
             // validate product
-            const product = await Product.findById(item.product);
+            const product = await Product.findById(item.product).session(session);
 
             if (!product) {
                 throw new apiErrr(
@@ -104,13 +110,20 @@ const createOder = asyncHandler(
             };
 
             orderItems.push(orderItem);
+
+
+            // Stock Reduce
+            variant.stock -= item.quantity;
+            await variant.save({ session });
+
+
         }
 
         // validate address
         const address = await Address.findOne({
             user: userId,
             isDefault: true,
-        });
+        }).session(session);
 
         if (!address) {
             throw new apiErrr(
@@ -156,8 +169,19 @@ const createOder = asyncHandler(
             status: "pending",
         };
 
+
+
+        //  cart items clear 
+
+        cart.items = [];
+        await cart.save({ session })
+
         // Generate Order Number
         const orderNumber = `ORD-${Date.now()}`;
+
+
+        // reduceing stock 
+
 
         // combine all oder data together ...
 
@@ -173,13 +197,23 @@ const createOder = asyncHandler(
 
         // Snapshot of oder
 
-        const oder = await Oder.create(oderData);
+        const [oder] = await Oder.create([oderData], { session });
+
+      await session.commitTransaction();
 
         res.status(201).json({
             success: true,
             message: "Order created successfully.",
             data: oder,
         });
+
+    }catch(err){
+           await session.abortTransaction();
+
+        throw err;
+    } finally{
+         session.endSession();
+    }
 
     }
 );
