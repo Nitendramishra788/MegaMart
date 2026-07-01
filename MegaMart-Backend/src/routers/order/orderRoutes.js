@@ -7,6 +7,7 @@ const {
     createOder,
     getOders,
     getSingleOrder,
+    cancelOrder,
 } = require("../../controllers/order/orderController");
 
 router.post(
@@ -25,6 +26,13 @@ router.get(
     "/get-order/:orderId",
     Protect,
     getSingleOrder
+
+);
+
+router.put(
+    "/cancel-order/:orderId",
+    Protect,
+    cancelOrder
 
 );
 

@@ -275,10 +275,75 @@ const getSingleOrder = asyncHandler(
     }
 )
 
+// cancel order api 
+
+const cancelOrder = asyncHandler(
+    async (req, res) => {
+
+        const { orderId } = req.params;
+
+        const order = await Oder.findById(orderId);
+
+        if (!order) {
+            throw new apiErrr(
+                404,
+                "Order not found."
+            );
+        };
+
+        //check ownership
+        if (order.user.toString() !== req.user._id.toString()) {
+            throw new apiErrr(
+                403,
+                "You are not authorized to cancel this order."
+            );
+        };
+
+        // check order status already cancelled
+        if (order.orderStatus === "cancelled") {
+            throw new apiErrr(
+                400,
+                "Order is already cancelled."
+            );
+        };
+
+        // check order status not allowed if processed
+        if (order.orderStatus !== "pending") {
+            throw new apiErrr(
+                400,
+                "Not allowed to cancel this order. Order is already processed."
+            );
+        };
+
+        // restore stock
+        for (const item of order.items) {
+
+            const variant = await Variant.findById(item.variant);
+
+            if (variant) {
+                variant.stock += item.quantity;
+                await variant.save();
+            }
+        }
+
+        // update order status
+        order.orderStatus = "cancelled";
+
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully.",
+            data: order,
+        });
+
+    }
+);
 
 
 module.exports = {
     createOder,
     getOders,
     getSingleOrder,
+    cancelOrder,
 };
