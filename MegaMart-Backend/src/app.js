@@ -14,6 +14,7 @@ const wishlistRoutes = require("./routers/wishlist/wishlistRouter");
 const addressRoutes = require("./routers/address/addressRoutes");
 const checkoutRoutes = require("./routers/checkout/checkoutRoutes");
 const oderRoutes = require("./routers/order/orderRoutes");
+const adminOrderRoutes = require("./routers/order/adminOrderRouters");
 
 // ERROR MIDDLEWARE (IMPORTANT)
 const errorMiddleware = require("./middlewares/errorMiddleware");
@@ -51,6 +52,7 @@ app.use("/api/wishlist" , wishlistRoutes);
 app.use("/api/address" , addressRoutes);
 app.use("/api/checkout" , checkoutRoutes);
 app.use("/api/oder" , oderRoutes);
+app.use("/api/admin/order" , adminOrderRoutes);
 
 app.get('/', (req , res)=>{
     res.send("Welcome to MegaMart API");
