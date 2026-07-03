@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const orderItemSchema = new mongoose.Schema(
+const sellerOrderItemSchema = new mongoose.Schema(
   {
     // References
     product: {
@@ -15,18 +15,17 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Product Snapshot
+    // Snapshot fields
     title: {
       type: String,
       required: true,
       trim: true,
     },
 
-    
     brand: {
-    type: String,
-    default: "",
-},
+      type: String,
+      default: "",
+    },
 
     sku: {
       type: String,
@@ -159,7 +158,7 @@ const pricingSchema = new mongoose.Schema(
   }
 );
 
-const paymentSchema = new mongoose.Schema(
+const paymentSummarySchema = new mongoose.Schema(
   {
     method: {
       type: String,
@@ -172,33 +171,45 @@ const paymentSchema = new mongoose.Schema(
       enum: ["pending", "paid", "failed", "refunded"],
       default: "pending",
     },
-
-    transactionId: {
-      type: String,
-      default: "",
-    },
   },
   {
     _id: false,
   }
 );
 
-const orderSchema = new mongoose.Schema(
+const sellerOrderSchema = new mongoose.Schema(
   {
-    orderNumber: {
+    sellerOrderNumber: {
       type: String,
+      required: true,
       unique: true,
+    },
+
+    parentOrder: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
       required: true,
     },
 
-    user: {
+    orderNumber: {
+      type: String,
+      required: true,
+    },
+
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+      
+    customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
     items: {
-      type: [orderItemSchema],
+      type: [sellerOrderItemSchema],
       required: true,
     },
 
@@ -213,7 +224,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     payment: {
-      type: paymentSchema,
+      type: paymentSummarySchema,
       default: {},
     },
 
@@ -226,7 +237,7 @@ const orderSchema = new mongoose.Schema(
         "shipped",
         "delivered",
         "cancelled",
-        "processing",
+        
       ],
       default: "pending",
     },
@@ -236,4 +247,4 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("SellerOrder", sellerOrderSchema);

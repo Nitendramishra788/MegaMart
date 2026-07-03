@@ -6,6 +6,7 @@ const Variant = require("../../models/ProductVariant");
 const Product = require("../../models/Product");
 const calculateShippingCharge = require("../../utils/calculateShipping");
 const Oder = require("../../models/Order");
+const SellerOrder = require("../../models/SellerOrder");
 
 // this is part of Mongoose Transsaction
 const mongoose = require("mongoose");
@@ -22,6 +23,7 @@ const createOder = asyncHandler(
             const userId = req.user._id;
             let subTotal = 0;
             const orderItems = [];
+            const sellerGroups = {};
 
             if (!userId) {
                 throw new apiErrr(
@@ -111,7 +113,29 @@ const createOder = asyncHandler(
 
                 orderItems.push(orderItem);
 
+                // seller grouping
 
+                // find seller objectId
+                const sellerId = product.seller.toString();
+
+                // check item group excite or not
+
+                if (!sellerGroups[sellerId]) {
+                    sellerGroups[sellerId] = {
+                        seller: sellerId,
+                        items: [],
+                        subTotal: 0,
+                    }
+                }
+
+                // and now push in group finaly item
+
+                sellerGroups[sellerId].items.push(orderItem);
+
+                // now update group sub total
+                sellerGroups[sellerId].subTotal += itemTotal;
+
+                console.log(sellerGroups);
                 // Stock Reduce
                 variant.stock -= item.quantity;
                 await variant.save({ session });
@@ -199,6 +223,67 @@ const createOder = asyncHandler(
 
             const [oder] = await Oder.create([oderData], { session });
 
+            for (const group of Object.values(sellerGroups)) {
+
+                // calculate price 
+                subTotal = group.subTotal
+
+                shippingCharge = calculateShippingCharge(group.subTotal)
+
+                tax = 0
+
+                discount = 0
+
+                grandTotal = group.subTotal + shippingCharge + tax - discount
+
+              
+                // Create Seller Orders
+                let sellerIndex = 1;
+
+                for (const group of Object.values(sellerGroups)) {
+
+                    // Seller Pricing
+                    const sellerSubTotal = group.subTotal;
+                    const sellerShippingCharge = calculateShippingCharge(sellerSubTotal);
+                    const sellerTax = 0;
+                    const sellerDiscount = 0;
+
+                    const sellerGrandTotal =
+                        sellerSubTotal +
+                        sellerShippingCharge +
+                        sellerTax -
+                        sellerDiscount;
+
+                    const pricing = {
+                        subTotal: sellerSubTotal,
+                        shippingCharge: sellerShippingCharge,
+                        tax: sellerTax,
+                        discount: sellerDiscount,
+                        grandTotal: sellerGrandTotal,
+                    };
+
+                    // Seller Order Number
+                    const sellerOrderNumber = `${order.orderNumber}-${sellerIndex++}`;
+
+                    // Seller Order Data
+                    const sellerOrderData = {
+                        sellerOrderNumber,
+                        parentOrder: order._id,
+                        orderNumber: order.orderNumber,
+                        seller: group.seller,
+                        customer: userId,
+                        items: group.items,
+                        shippingAddress,
+                        pricing,
+                        payment,
+                        orderStatus: "pending",
+                    };
+
+                    // Save Seller Order
+                    await SellerOrder.create([sellerOrderData], { session });
+                }
+            }
+
             await session.commitTransaction();
 
             res.status(201).json({
@@ -254,11 +339,11 @@ const getOders = asyncHandler(
 
 const getSingleOrder = asyncHandler(
     async (req, res) => {
-        const {orderId} = req.params;
+        const { orderId } = req.params;
 
         const order = await Oder.findById(orderId);
 
-        if(!order){
+        if (!order) {
             throw new apiErrr(
                 404,
                 "Order not found."
@@ -270,8 +355,8 @@ const getSingleOrder = asyncHandler(
             message: "Order retrieved successfully.",
             data: order,
         });
-    
-    
+
+
     }
 )
 
