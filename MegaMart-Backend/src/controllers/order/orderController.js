@@ -59,12 +59,12 @@ const createOder = asyncHandler(
                 }
 
                 // validate variant status
-                if (!variant.isDefault) {
-                    throw new apiErrr(
-                        404,
-                        "Variant is currently unavailable."
-                    );
-                }
+                // if (!variant.isDefault) {
+                //     throw new apiErrr(
+                //         404,
+                //         "Variant is currently unavailable."
+                //     );
+                // }
 
                 // validate product
                 const product = await Product.findById(item.product).session(session);
@@ -223,18 +223,7 @@ const createOder = asyncHandler(
 
             const [oder] = await Oder.create([oderData], { session });
 
-            for (const group of Object.values(sellerGroups)) {
-
-                // calculate price 
-                subTotal = group.subTotal
-
-                shippingCharge = calculateShippingCharge(group.subTotal)
-
-                tax = 0
-
-                discount = 0
-
-                grandTotal = group.subTotal + shippingCharge + tax - discount
+           
 
               
                 // Create Seller Orders
@@ -263,13 +252,13 @@ const createOder = asyncHandler(
                     };
 
                     // Seller Order Number
-                    const sellerOrderNumber = `${order.orderNumber}-${sellerIndex++}`;
+                    const sellerOrderNumber = `${oder.orderNumber}-${sellerIndex++}`;
 
                     // Seller Order Data
                     const sellerOrderData = {
                         sellerOrderNumber,
-                        parentOrder: order._id,
-                        orderNumber: order.orderNumber,
+                        parentOrder: oder._id,
+                        orderNumber: oder.orderNumber,
                         seller: group.seller,
                         customer: userId,
                         items: group.items,
@@ -282,7 +271,7 @@ const createOder = asyncHandler(
                     // Save Seller Order
                     await SellerOrder.create([sellerOrderData], { session });
                 }
-            }
+            
 
             await session.commitTransaction();
 
