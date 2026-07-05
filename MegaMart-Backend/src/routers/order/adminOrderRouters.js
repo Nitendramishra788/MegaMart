@@ -11,6 +11,6 @@ router.get("/all-orders",
     Protect,
     admin,
     getAllOrders);
-
+  
 
 module.exports = router;

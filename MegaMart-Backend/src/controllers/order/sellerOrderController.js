@@ -2,6 +2,7 @@ const Order = require("../../models/Order");
 const asyncHandler = require("../../utils/asyncHandler");
 const apiErrr = require("../../utils/apiErrr");
 const SellerOrder = require("../../models/SellerOrder");
+const mongoose = require("mongoose");
 
 // get all order api of seller
 
@@ -109,6 +110,50 @@ const getSellerOrder = asyncHandler(
     }
 );
 
+
+
+
+// this is part of get single order by using Id
+
+const getSingleOrder = asyncHandler(
+    async (req, res) => {
+        const { orderId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            throw new apiErrr(
+                409,
+                "Invaild order ID...!"
+            )
+        };
+
+
+        const sellerOrder = await SellerOrder.findOne({
+            _id: orderId,
+            seller: req.user._id
+        })
+
+        if (!sellerOrder) {
+            throw new apiErrr(
+                400,
+                "order fond not..!"
+            )
+        }
+
+
+        return res.status(200).json({
+            success: true,
+            message: "Seller order fetched successfully.",
+            data: sellerOrder,
+        });
+
+
+    }
+
+
+
+)
+
 module.exports = {
     getSellerOrder,
+      getSingleOrder,
 };

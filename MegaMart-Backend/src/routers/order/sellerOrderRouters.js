@@ -6,7 +6,8 @@ const protect = require("../../middlewares/authMiddleware");
 
 
 const {
-    getSellerOrder
+    getSellerOrder,
+    getSingleOrder,
 } = require("../../controllers/order/sellerOrderController");
 const { model } = require("mongoose");
 
@@ -18,6 +19,14 @@ router.get(
     protect,
     seller,
     getSellerOrder
+);
+
+
+router.get(
+    "/get-single/order/:orderId",
+    Protect,
+    seller,
+    getSingleOrder
 );
 
 
