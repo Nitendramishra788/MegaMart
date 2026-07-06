@@ -8,6 +8,7 @@ const protect = require("../../middlewares/authMiddleware");
 const {
     getSellerOrder,
     getSingleOrder,
+    updateStatus,
 } = require("../../controllers/order/sellerOrderController");
 const { model } = require("mongoose");
 
@@ -21,7 +22,7 @@ router.get(
     getSellerOrder
 );
 
-
+// get singal order
 router.get(
     "/get-single/order/:orderId",
     Protect,
@@ -29,5 +30,12 @@ router.get(
     getSingleOrder
 );
 
+// update status order 
 
+router.patch(
+    "/update-status/:orderId",
+    Protect,
+    seller,
+    updateStatus,
+);
 module.exports = router;

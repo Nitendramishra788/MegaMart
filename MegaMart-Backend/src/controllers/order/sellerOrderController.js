@@ -151,9 +151,83 @@ const getSingleOrder = asyncHandler(
 
 
 
+);
+
+
+
+// update status api 
+
+const updateStatus = asyncHandler(
+    async(req , res)=>{
+        const {orderId} = req.params;
+       const { orderStatus: newStatus } = req.body;
+
+        // validate objectid
+        if(!mongoose.Types.ObjectId.isValid(orderId)){
+            throw new apiErrr(
+                400,
+                "Invalid ObjectID...!"
+            )
+        };
+
+        // check ownerSHip
+        const sellerOrder = await SellerOrder.findOne({
+            _id:orderId,
+           seller: req.user._id
+        });
+
+        if(!sellerOrder){
+            throw new apiErrr(
+                404,
+                "sorry Order not found..!"
+            )
+        };
+
+
+        // check wrokflow transition matalb ki status oder 
+
+        const validTranseition = {
+            pending:["confirmed" ,"cancelled"],
+
+            confirmed:["packed"],
+
+            packed:["shipped"],
+
+            shipped:["delivered"],
+
+            delivered:[],
+
+            cancelled:[],
+
+        };
+
+        const currentStatus = sellerOrder.orderStatus;
+
+        const allowStatus = validTranseition[currentStatus];
+
+        if (!allowStatus.includes(newStatus)) {
+            throw new apiErrr(
+                409,
+                "Invalid status transition...!"
+            );
+        }
+
+       // update status
+        sellerOrder.orderStatus = newStatus;
+
+        // save updated status
+        await sellerOrder.save();
+
+        res.status(200).json({
+            success:true,
+            message:"statuse updatedsuccefuly...!",
+            data: sellerOrder,
+        });
+    }
 )
 
 module.exports = {
     getSellerOrder,
       getSingleOrder,
+      updateStatus,
 };
