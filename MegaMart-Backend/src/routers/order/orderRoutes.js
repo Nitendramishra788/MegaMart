@@ -8,6 +8,7 @@ const {
     getOders,
     getSingleOrder,
     cancelOrder,
+    updateMainOrderStatus,
 } = require("../../controllers/order/orderController");
 
 router.post(
@@ -36,4 +37,10 @@ router.put(
 
 );
 
+
+router.patch(
+    "/main-order/status",
+     Protect,
+    updateMainOrderStatus
+);
 module.exports = router;

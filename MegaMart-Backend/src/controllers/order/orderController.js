@@ -223,55 +223,55 @@ const createOder = asyncHandler(
 
             const [oder] = await Oder.create([oderData], { session });
 
-           
 
-              
-                // Create Seller Orders
-                let sellerIndex = 1;
 
-                for (const group of Object.values(sellerGroups)) {
 
-                    // Seller Pricing
-                    const sellerSubTotal = group.subTotal;
-                    const sellerShippingCharge = calculateShippingCharge(sellerSubTotal);
-                    const sellerTax = 0;
-                    const sellerDiscount = 0;
+            // Create Seller Orders
+            let sellerIndex = 1;
 
-                    const sellerGrandTotal =
-                        sellerSubTotal +
-                        sellerShippingCharge +
-                        sellerTax -
-                        sellerDiscount;
+            for (const group of Object.values(sellerGroups)) {
 
-                    const pricing = {
-                        subTotal: sellerSubTotal,
-                        shippingCharge: sellerShippingCharge,
-                        tax: sellerTax,
-                        discount: sellerDiscount,
-                        grandTotal: sellerGrandTotal,
-                    };
+                // Seller Pricing
+                const sellerSubTotal = group.subTotal;
+                const sellerShippingCharge = calculateShippingCharge(sellerSubTotal);
+                const sellerTax = 0;
+                const sellerDiscount = 0;
 
-                    // Seller Order Number
-                    const sellerOrderNumber = `${oder.orderNumber}-${sellerIndex++}`;
+                const sellerGrandTotal =
+                    sellerSubTotal +
+                    sellerShippingCharge +
+                    sellerTax -
+                    sellerDiscount;
 
-                    // Seller Order Data
-                    const sellerOrderData = {
-                        sellerOrderNumber,
-                        parentOrder: oder._id,
-                        orderNumber: oder.orderNumber,
-                        seller: group.seller,
-                        customer: userId,
-                        items: group.items,
-                        shippingAddress,
-                        pricing,
-                        payment,
-                        orderStatus: "pending",
-                    };
+                const pricing = {
+                    subTotal: sellerSubTotal,
+                    shippingCharge: sellerShippingCharge,
+                    tax: sellerTax,
+                    discount: sellerDiscount,
+                    grandTotal: sellerGrandTotal,
+                };
 
-                    // Save Seller Order
-                    await SellerOrder.create([sellerOrderData], { session });
-                }
-            
+                // Seller Order Number
+                const sellerOrderNumber = `${oder.orderNumber}-${sellerIndex++}`;
+
+                // Seller Order Data
+                const sellerOrderData = {
+                    sellerOrderNumber,
+                    parentOrder: oder._id,
+                    orderNumber: oder.orderNumber,
+                    seller: group.seller,
+                    customer: userId,
+                    items: group.items,
+                    shippingAddress,
+                    pricing,
+                    payment,
+                    orderStatus: "pending",
+                };
+
+                // Save Seller Order
+                await SellerOrder.create([sellerOrderData], { session });
+            }
+
 
             await session.commitTransaction();
 
@@ -415,9 +415,62 @@ const cancelOrder = asyncHandler(
 );
 
 
+
+// agregate main order and update status api
+
+const updateMainOrderStatus = asyncHandler(
+    async (req, res) => {
+
+
+        const mainOrder = await SellerOrder.find({
+            parentOrder: sellerOrder.parentOrder
+        });
+
+        const allStatus = mainOrder.map((order) => order.orderStatus);
+
+        let finalStatus;
+        if (allStatus.every((Take) => Take === "pending")) {
+            finalStatus = "pending";
+        }
+
+        else if (allStatus.every((Take) => Take === "delivered")) {
+
+            finalStatus = "delivered";
+        }
+
+        else {
+
+            finalStatus = "processing";
+        }
+
+        const oder = await Oder.findById(sellerOrder.parentOrder);
+
+        if (!oder) {
+            throw new apiErrr(
+                404,
+                "Main order not found..!"
+            );
+        }
+
+        oder.orderStatus = finalStatus;
+
+        await oder.save();
+
+        res.status(200).json({
+            success: true,
+            message: "main Order status updated successfuly..!",
+            data: oder,
+        })
+
+    }
+
+)
+
+
 module.exports = {
     createOder,
     getOders,
     getSingleOrder,
     cancelOrder,
+    updateMainOrderStatus,
 };
