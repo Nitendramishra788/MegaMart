@@ -1,7 +1,11 @@
-const asy9ncHandler = require("../../utils/asyncHandler");
+const asyncHandler = require("../../utils/asyncHandler");
 const apiErrr = require("../../utils/apiErrr");
+const Payment = require("../../models/Payment");
+const mongoose = require("mongoose");
 const Order = require("../../models/Order");
-const { default: mongoose } = require("mongoose");
+// const { default: mongoose } = require("mongoose");
+const generateSequence = require("../../utils/generateSequence");
+const razorpay = require("../../config/rezorpay")
 
 const createPayment = asyncHandler(
     async (req, res) => {
@@ -24,15 +28,17 @@ const createPayment = asyncHandler(
                 "order not found..!"
             )
         };
-
+      
         // check ownerShip
 
-        if (!order.user.equals(req.userId)) {
+        if (!order.user.equals(req.user._id)) {
             throw new apiErrr(
                 403,
                 "This order does not belong to you.!"
             )
         };
+
+        
 
         //    check payment method 
 
@@ -59,7 +65,10 @@ const createPayment = asyncHandler(
             )
         };
 
+        
+
         // existing pending payment 
+        console.log("Payment =>", Payment);
 
         const pendingPayment = await Payment.findOne({
             order: order._id,
@@ -69,11 +78,13 @@ const createPayment = asyncHandler(
         if (pendingPayment) {
 
             return res.status(200).json({
-                success:true,
-                message:"Existing pending payment found.",
-                 pendingPayment,
+                success: true,
+                message: "Existing pending payment found.",
+                data: {
+                    payment: pendingPayment
+                }
             })
-          
+
         }
 
 
@@ -85,17 +96,25 @@ const createPayment = asyncHandler(
             notes: {
                 orderId: order._id.toString(),
                 orderNumber: order.orderNumber,
-                customerId: req.userId.toString(),
+                customerId: req.user._id.toString(),
             },
         });
-
+    
 
         // create payment document
-    
+        const paymentNumber = await generateSequence(
+            "paymentNumber",
+            "PAY"
+        );
+
+       
+        
         const payment = await Payment.create({
-            paymentNumber: "GENERATE_PAYMENT_NUMBER", // replace with your logic
+            // paymentNumber: "GENERATE_PAYMENT_NUMBER", // replace with your logic
+            paymentNumber: paymentNumber,
+
             order: order._id,
-            customer: req.userId,
+            customer: req.user._id,
 
             amount: order.pricing.grandTotal,
             currency: "INR",
@@ -121,3 +140,8 @@ const createPayment = asyncHandler(
 
     }
 )
+
+
+module.exports= {
+    createPayment,
+}
