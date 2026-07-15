@@ -142,6 +142,36 @@ const createPayment = asyncHandler(
 )
 
 
+// this is part of varify api
+
+const verifyPayment = asyncHandler(
+    async(req , res)=>{
+        const {
+    paymentId,
+    razorpay_payment_id,
+    razorpay_order_id,
+    razorpay_signature
+} = req.body;
+
+// Input Validation
+if (
+    !paymentId ||
+    !razorpay_payment_id ||
+    !razorpay_order_id ||
+    !razorpay_signature
+) {
+    throw new ApiError(400, "All fields are required.");
+}
+
+
+// ObjectId Validation
+if (!mongoose.Types.ObjectId.isValid(paymentId)) {
+    throw new ApiError(400, "Invalid payment id.");
+}
+    }
+)
+
+
 module.exports= {
     createPayment,
 }
