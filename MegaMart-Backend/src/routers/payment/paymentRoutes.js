@@ -5,6 +5,7 @@ const Protect = require("../../middlewares/authMiddleware");
 
 const  {
      createPayment,
+     verifyPayment,
 } = require("../../controllers/payment/paymentController");
 
 
@@ -13,5 +14,12 @@ router.post(
     Protect,
     createPayment
 );
+
+
+router.post(
+    "/verify",
+    Protect,
+    verifyPayment,
+)
 
 module.exports = router;

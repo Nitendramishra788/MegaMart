@@ -6,6 +6,7 @@ const Order = require("../../models/Order");
 // const { default: mongoose } = require("mongoose");
 const generateSequence = require("../../utils/generateSequence");
 const razorpay = require("../../config/rezorpay")
+const verifyRazorpaySignature = require("../../utils/verifyRazorpaySignature");
 
 const createPayment = asyncHandler(
     async (req, res) => {
@@ -28,7 +29,7 @@ const createPayment = asyncHandler(
                 "order not found..!"
             )
         };
-      
+
         // check ownerShip
 
         if (!order.user.equals(req.user._id)) {
@@ -38,7 +39,7 @@ const createPayment = asyncHandler(
             )
         };
 
-        
+
 
         //    check payment method 
 
@@ -65,7 +66,7 @@ const createPayment = asyncHandler(
             )
         };
 
-        
+
 
         // existing pending payment 
         console.log("Payment =>", Payment);
@@ -99,7 +100,7 @@ const createPayment = asyncHandler(
                 customerId: req.user._id.toString(),
             },
         });
-    
+
 
         // create payment document
         const paymentNumber = await generateSequence(
@@ -107,10 +108,10 @@ const createPayment = asyncHandler(
             "PAY"
         );
 
-       
-        
+
+
         const payment = await Payment.create({
-            // paymentNumber: "GENERATE_PAYMENT_NUMBER", // replace with your logic
+
             paymentNumber: paymentNumber,
 
             order: order._id,
@@ -144,34 +145,167 @@ const createPayment = asyncHandler(
 
 // this is part of varify api
 
-const verifyPayment = asyncHandler(
-    async(req , res)=>{
+const verifyPayment =
+    async (req, res) => {
+
         const {
-    paymentId,
-    razorpay_payment_id,
-    razorpay_order_id,
-    razorpay_signature
-} = req.body;
+            paymentId,
+            razorpay_payment_id,
+            razorpay_order_id,
+            razorpay_signature
+        } = req.body;
 
-// Input Validation
-if (
-    !paymentId ||
-    !razorpay_payment_id ||
-    !razorpay_order_id ||
-    !razorpay_signature
-) {
-    throw new ApiError(400, "All fields are required.");
-}
+        // Input Validation
+        if (
+            !paymentId ||
+            !razorpay_payment_id ||
+            !razorpay_order_id ||
+            !razorpay_signature
+        ) {
+            throw new apiErrr(400, "All fields are required.");
+        }
 
 
-// ObjectId Validation
-if (!mongoose.Types.ObjectId.isValid(paymentId)) {
-    throw new ApiError(400, "Invalid payment id.");
-}
+        // ObjectId Validation
+        if (!mongoose.Types.ObjectId.isValid(paymentId)) {
+            throw new apiErrr(400, "Invalid payment id.");
+        }
+
+
+        // find payment 
+
+        const payment = await Payment.findById(paymentId);
+
+        if (!payment) {
+            throw new apiErrr(
+                404,
+                "payment not found..!"
+            )
+        }
+
+        // find order
+
+        const order = await Order.findById(payment.order);
+
+        if (!order) {
+            throw new apiErrr(
+                404,
+                "order not found...!"
+            )
+        };
+
+        // check ownerShip
+
+        if (!order.user.equals(req.user._id)) {
+            throw new apiErrr(
+                403,
+                "this is not belong to you..!"
+            )
+        };
+
+        // order cancelled
+
+        if (order.orderStatus === "cancelled") {
+            throw new apiErrr(
+                400,
+                "cancelled order cannt verified..!"
+            )
+        };
+
+        // payment already paid
+
+        if (payment.paymentStatus === "paid") {
+            throw new apiErrr(
+                409,
+                "Payment has already been verified."
+            );
+        };
+
+
+        // gateway order match
+
+        if (payment.gatewayOrderId !== razorpay_order_id) {
+            throw new apiErrr(
+                400,
+                "Invalid gateway order."
+            );
+        }
+
+
+        // signature verification
+
+        const isValid = verifyRazorpaySignature(
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+        );
+
+        if (!isValid) {
+            throw new apiErrr(
+                400,
+                "Invalid payment signature."
+            )
+        };
+
+        // Transaction Start
+
+        const session = await mongoose.startSession();
+
+        try {
+
+            session.startTransaction();
+
+            // payment save and update
+            const now = new Date();
+
+            payment.paymentStatus = "paid";
+            payment.gatewayPaymentId = razorpay_payment_id;
+            payment.gatewaySignature = razorpay_signature;
+            payment.verifiedAt = now;
+            payment.paidAt = now;
+
+            await payment.save({ session });
+
+            // order save
+            order.payment.status = "paid";
+            order.payment.transactionId = razorpay_payment_id;
+
+            await order.save({ session });
+
+            await session.commitTransaction();
+
+            // response 
+
+            return res.status(200).json({
+                success: true,
+                message: "Payment verified successfully.",
+                data: {
+                    paymentId: payment._id,
+                    orderId: order._id,
+                    paymentStatus: payment.paymentStatus
+                }
+            });
+
+
+        } catch (error) {
+
+            await session.abortTransaction();
+
+            throw error;
+
+        } finally {
+
+            session.endSession();
+
+        }
+
+
+
     }
-)
 
 
-module.exports= {
+
+module.exports = {
     createPayment,
+    verifyPayment,
 }
