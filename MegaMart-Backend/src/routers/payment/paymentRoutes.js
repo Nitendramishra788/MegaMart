@@ -6,6 +6,7 @@ const Protect = require("../../middlewares/authMiddleware");
 const  {
      createPayment,
      verifyPayment,
+     webhook,
 } = require("../../controllers/payment/paymentController");
 
 
@@ -21,5 +22,12 @@ router.post(
     Protect,
     verifyPayment,
 )
+
+
+router.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    webhook
+);
 
 module.exports = router;

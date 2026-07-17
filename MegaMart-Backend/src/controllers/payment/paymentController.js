@@ -7,6 +7,7 @@ const Order = require("../../models/Order");
 const generateSequence = require("../../utils/generateSequence");
 const razorpay = require("../../config/rezorpay")
 const verifyRazorpaySignature = require("../../utils/verifyRazorpaySignature");
+const verifyWebhookSignature = require("../../utils/verifyWebhookSignature");
 
 const createPayment = asyncHandler(
     async (req, res) => {
@@ -303,9 +304,238 @@ const verifyPayment =
 
     }
 
+// this is part of webhook api
+const webhook = asyncHandler(async (req, res) => {
+
+    // Verify Signature
+    const webhookSignature =
+        req.headers["x-razorpay-signature"];
+
+    if (!webhookSignature) {
+        throw new apiErrr(
+            400,
+            "Webhook signature is missing."
+        );
+    }
+
+    const isValid = verifyWebhookSignature(
+        req.body,
+        webhookSignature
+    );
+
+    if (!isValid) {
+        throw new apiErrr(
+            400,
+            "Invalid webhook signature."
+        );
+    }
+
+    // Parse Raw Body
+    const webhookBody = JSON.parse(req.body.toString());
+
+    // Read Webhook Data
+    const event = webhookBody.event;
+
+    if (!event) {
+        throw new apiErrr(
+            400,
+            "Webhook event is required."
+        );
+    }
+
+    const paymentEntity =
+        webhookBody.payload?.payment?.entity;
+
+    if (!paymentEntity) {
+        throw new apiErrr(
+            400,
+            "Invalid webhook payload."
+        );
+    }
+
+    const {
+        id,
+        order_id,
+        status,
+    } = paymentEntity;
+
+    if (!id || !order_id || !status) {
+        throw new apiErrr(
+            400,
+            "Invalid payment details."
+        );
+    }
+
+    //    find payment
+
+    const payment = await Payment.findOne({
+        gatewayOrderId: order_id,
+    });
+
+    // payment exist
+
+    if (!payment) {
+        throw new apiErrr(
+            404,
+            "payment not found..!"
+        );
+    }
+
+    // alredy processed
+
+    if (payment.paymentStatus === "paid") {
+        return res.status(200).json({
+            success: true,
+            message: "Webhook already processed."
+        });
+    }
+
+    // find order
+
+    const order = await Order.findById(
+        payment.order
+    );
+
+    if (!order) {
+        throw new apiErrr(
+            404,
+            "Order not found...!"
+        );
+    }
+
+    // swith event
+
+    switch (event) {
+
+        case "payment.captured": {
+
+            const session = await mongoose.startSession();
+
+            try {
+
+                session.startTransaction();
+
+                const now = new Date();
+
+                payment.paymentStatus = "paid";
+                payment.gatewayPaymentId = id;
+                payment.gatewaySignature = webhookSignature;
+                payment.verifiedAt = now;
+                payment.paidAt = now;
+
+                await payment.save({ session });
+
+                order.payment.status = "paid";
+                order.payment.transactionId = id;
+
+                await order.save({ session });
+
+                await session.commitTransaction();
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Payment captured successfully."
+                });
+
+            } catch (error) {
+
+                await session.abortTransaction();
+
+                throw error;
+
+            } finally {
+
+                session.endSession();
+
+            }
+
+        }
+
+        case "payment.failed": {
+
+            const session = await mongoose.startSession();
+
+            try {
+
+                session.startTransaction();
+
+                payment.paymentStatus = "failed";
+                payment.gatewayPaymentId = id;
+                payment.gatewaySignature = webhookSignature;
+                payment.failureReason =
+                    paymentEntity.error_description ||
+                    paymentEntity.error_reason ||
+                    "Payment failed";
+
+                await payment.save({ session });
+
+                order.payment.status = "pending";
+
+                await order.save({ session });
+
+                await session.commitTransaction();
+
+                return res.status(200).json({
+                    success: true,
+                    message: "Payment failed updated successfully."
+                });
+
+            } catch (error) {
+
+                await session.abortTransaction();
+
+                throw error;
+
+            } finally {
+
+                session.endSession();
+
+            }
+
+        }
+
+        default:
+
+            return res.status(200).json({
+                success: true,
+                message: "Event ignored."
+            });
+
+    }
+
+});
 
 
 module.exports = {
     createPayment,
     verifyPayment,
+    webhook,
 }
+
+/*
+    NOTE (Nit):
+
+    Backend implementation is completed.
+
+    Things covered:
+     Webhook signature verification
+     Payload validation
+     Payment lookup
+     Order lookup
+     Idempotency check
+     payment.captured
+     payment.failed
+     Payment & Order update
+     MongoDB transaction
+
+    Pending:
+     Real webhook testing
+     Frontend Razorpay checkout integration
+     verifyPayment end-to-end testing
+     Webhook end-to-end testing
+     Retry & edge case testing
+
+    Reason:
+    Frontend checkout is not ready yet, so payment flow cannot be tested
+    completely. Resume this module after frontend payment integration.
+*/
