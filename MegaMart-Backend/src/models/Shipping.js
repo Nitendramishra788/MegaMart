@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const shipmentSchema = new mongoose.Schema(
   {
     // Identity
@@ -107,7 +109,7 @@ const shipmentSchema = new mongoose.Schema(
         required: true,
       },
 
-      postalCode: {
+      pincode: {
         type: String,
         required: true,
       },
@@ -191,4 +193,4 @@ const shipmentSchema = new mongoose.Schema(
 
 const Shipment = mongoose.model("Shipment", shipmentSchema);
 
-export default Shipment;
+module.exports = Shipment;
