@@ -106,6 +106,99 @@ const createShipping = asyncHandler(async (req, res) => {
 
 
 
+const updateShipmentStatus = asyncHandler(async (req, res) => {
+    const { shipmentId } = req.params;
+    const { status } = req.body;
+
+    //  Validate Shipment ID
+    if (!mongoose.Types.ObjectId.isValid(shipmentId)) {
+        throw new apiErrr(
+            400,
+            "Invalid shipment ID. Please recheck."
+        );
+    }
+
+    //  Validate Status
+    const allowedStatuses = [
+        "picked_up",
+        "in_transit",
+        "out_for_delivery",
+        "delivered",
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+        throw new apiErrr(
+            400,
+            "Invalid shipment status."
+        );
+    }
+
+    //  Find Shipment
+    const shipment = await Shipping.findById(shipmentId);
+
+    if (!shipment) {
+        throw new apiErrr(
+            404,
+            "Shipment not found."
+        );
+    }
+
+    //  Seller Ownership Check
+    if (!shipment.seller.equals(req.user._id)) {
+        throw new apiErrr(
+            403,
+            "Unauthorized access."
+        );
+    }
+
+    //  Valid Status Transitions
+    const validTransitions = {
+        created: ["picked_up"],
+        picked_up: ["in_transit"],
+        in_transit: ["out_for_delivery"],
+        out_for_delivery: ["delivered"],
+        delivered: [],
+        cancelled: [],
+    };
+
+    const currentStatus = shipment.status;
+
+    if (!validTransitions[currentStatus].includes(status)) {
+        throw new apiErrr(
+            409,
+            `Cannot change shipment status from ${currentStatus} to ${status}.`
+        );
+    }
+
+    //  Update Shipment Status
+    shipment.status = status;
+
+    //  Add Timeline Entry
+    shipment.timeline.push({
+        status,
+        updatedAt: new Date(),
+    });
+
+    //  If Delivered
+    if (status === "delivered") {
+        shipment.deliveredAt = new Date();
+    }
+
+    //  Save Shipment
+    await shipment.save();
+
+    //  Response
+    res.status(200).json({
+        success:true,
+        message:"Shipment status updated successfully.",
+        shipment,
+    })
+
+    
+   
+});
+
 module.exports = {
    createShipping,
+   updateShipmentStatus,
 }
