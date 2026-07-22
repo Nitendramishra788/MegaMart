@@ -189,16 +189,63 @@ const updateShipmentStatus = asyncHandler(async (req, res) => {
 
     //  Response
     res.status(200).json({
-        success:true,
-        message:"Shipment status updated successfully.",
+        success: true,
+        message: "Shipment status updated successfully.",
         shipment,
     })
 
-    
-   
+
+
 });
 
+
+// this is part of get shipment details
+
+const getShipment = asyncHandler(
+    async (req, res) => {
+        const { shipmentId } = req.params;
+
+        // validate mongoose objectId
+
+        if (!mongoose.Types.ObjectId.isValid(shipmentId)) {
+            throw new apiErrr(
+                400,
+                "invaild ID please recheck..!"
+            )
+        };
+
+        // find shipment 
+
+        const shipment = await Shipping.findById(shipmentId);
+
+        if (!shipment) {
+            throw new apiErrr(
+                404,
+                "shipment not found...!"
+            )
+        };
+
+        // check ownership
+
+          if (!shipment.seller.equals(req.user._id)) {
+            throw new apiErrr(
+                403,
+                "Unauthorized access."
+            );
+        }
+
+        // response 
+
+        res.status(200).json({
+            success:true,
+            message:"fetch your shipment Details successful..!",
+            shipment,
+        });
+    }
+)
+
 module.exports = {
-   createShipping,
-   updateShipmentStatus,
+    createShipping,
+    updateShipmentStatus,
+    getShipment,
 }

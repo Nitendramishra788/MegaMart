@@ -6,6 +6,7 @@ const {seller} = require("../../middlewares/sellerMiddleware")
 const {
     createShipping,
     updateShipmentStatus,
+    getShipment,
 } = require("../../controllers/shipping/shippingController");
 const { model } = require("mongoose");
 
@@ -24,5 +25,13 @@ router.patch(
     seller,
     updateShipmentStatus,
 );
+
+
+router.get(
+    "/get-shipment/:shipmentId",
+    Protect,
+    seller,
+    getShipment,
+)
 
 module.exports = router;
