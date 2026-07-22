@@ -161,6 +161,20 @@ const updateShipmentStatus = asyncHandler(async (req, res) => {
         cancelled: [],
     };
 
+
+      // Generate Tracking Number
+    if (
+        status === "picked_up" &&
+        !shipment.trackingNumber
+    ) {
+        const trackingNumber = await generateSequence(
+            "trackingNumber",
+            "TRK"
+        );
+
+        shipment.trackingNumber = trackingNumber;
+    }
+
     const currentStatus = shipment.status;
 
     if (!validTransitions[currentStatus].includes(status)) {
@@ -227,7 +241,7 @@ const getShipment = asyncHandler(
 
         // check ownership
 
-          if (!shipment.seller.equals(req.user._id)) {
+        if (!shipment.seller.equals(req.user._id)) {
             throw new apiErrr(
                 403,
                 "Unauthorized access."
@@ -237,15 +251,59 @@ const getShipment = asyncHandler(
         // response 
 
         res.status(200).json({
-            success:true,
-            message:"fetch your shipment Details successful..!",
+            success: true,
+            message: "fetch your shipment Details successful..!",
             shipment,
         });
     }
 )
 
+// shipment tracking api for the costomer 
+const trackShipment = asyncHandler(
+    async (req, res) => {
+
+        const { trackingNumber } = req.params;
+
+        // Validate tracking number
+        if (!trackingNumber) {
+            throw new apiErrr(
+                400,
+                "Tracking number is required."
+            );
+        }
+
+        // Find shipment by tracking number
+        const shipment = await Shipping.findOne({
+            trackingNumber
+        });
+
+        if (!shipment) {
+            throw new apiErrr(
+                404,
+                "Tracking number not found."
+            );
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Shipment tracking details fetched successfully.",
+            tracking: {
+                trackingNumber: shipment.trackingNumber,
+                shipmentNumber: shipment.shipmentNumber,
+                status: shipment.status,
+                timeline: shipment.timeline,
+                deliveredAt: shipment.deliveredAt,
+                deliveryAttempts: shipment.deliveryAttempts,
+                lastFailureReason: shipment.lastFailureReason,
+            },
+        });
+    }
+);
+
+
 module.exports = {
     createShipping,
     updateShipmentStatus,
     getShipment,
+    trackShipment,
 }

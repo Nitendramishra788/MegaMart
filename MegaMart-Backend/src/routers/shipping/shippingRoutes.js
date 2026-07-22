@@ -7,6 +7,7 @@ const {
     createShipping,
     updateShipmentStatus,
     getShipment,
+    trackShipment,
 } = require("../../controllers/shipping/shippingController");
 const { model } = require("mongoose");
 
@@ -32,6 +33,11 @@ router.get(
     Protect,
     seller,
     getShipment,
-)
+);
+
+router.get(
+    "/track/:trackingNumber",
+    trackShipment
+);
 
 module.exports = router;
