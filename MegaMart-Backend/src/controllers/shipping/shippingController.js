@@ -162,7 +162,7 @@ const updateShipmentStatus = asyncHandler(async (req, res) => {
     };
 
 
-      // Generate Tracking Number
+    // Generate Tracking Number
     if (
         status === "picked_up" &&
         !shipment.trackingNumber
@@ -301,9 +301,83 @@ const trackShipment = asyncHandler(
 );
 
 
+const deliveryAttempt = asyncHandler(
+    async (req, res) => {
+
+        const { shipmentId } = req.params;
+        const { reason } = req.body;
+
+        // Validate Shipment ID
+        if (!mongoose.Types.ObjectId.isValid(shipmentId)) {
+            throw new apiErrr(
+                400,
+                "Invalid shipment ID. Please recheck."
+            );
+        }
+
+        // Validate Failure Reason
+        if (!reason || !reason.trim()) {
+            throw new apiErrr(
+                400,
+                "Delivery failure reason is required."
+            );
+        }
+
+        // Find Shipment
+        const shipment = await Shipping.findById(shipmentId);
+
+        if (!shipment) {
+            throw new apiErrr(
+                404,
+                "Shipment not found."
+            );
+        }
+
+        // Check Seller Ownership
+        if (!shipment.seller.equals(req.user._id)) {
+            throw new apiErrr(
+                403,
+                "Unauthorized access."
+            );
+        }
+
+        // Delivery attempt allowed only for out_for_delivery
+        if (shipment.status !== "out_for_delivery") {
+            throw new apiErrr(
+                409,
+                "Delivery attempt can only be recorded when shipment is out for delivery."
+            );
+        }
+
+        // Increase Delivery Attempts
+        shipment.deliveryAttempts += 1;
+
+        // Save Last Failure Reason
+        shipment.lastFailureReason = reason.trim();
+
+        // Add Timeline Entry
+        shipment.timeline.push({
+            status: "delivery_failed",
+            reason: reason.trim(),
+            updatedAt: new Date(),
+        });
+
+        // Save Shipment
+        await shipment.save();
+
+        // Response
+        return res.status(200).json({
+            success: true,
+            message: "Delivery attempt recorded successfully.",
+            shipment,
+        });
+    }
+);
+
 module.exports = {
     createShipping,
     updateShipmentStatus,
     getShipment,
     trackShipment,
+    deliveryAttempt,
 }

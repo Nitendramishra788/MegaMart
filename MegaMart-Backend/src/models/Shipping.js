@@ -58,27 +58,27 @@ const shipmentSchema = new mongoose.Schema(
     },
 
     // Items
-    items: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
+    // items: [
+    //   {
+    //     product: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "Product",
+    //       required: true,
+    //     },
 
-        variant: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Variant",
-          required: true,
-        },
+    //     variant: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "Variant",
+    //       required: true,
+    //     },
 
-        quantity: {
-          type: Number,
-          required: true,
-          min: 1,
-        },
-      },
-    ],
+    //     quantity: {
+    //       type: Number,
+    //       required: true,
+    //       min: 1,
+    //     },
+    //   },
+    // ],
 
     // Shipping Address Snapshot
     shippingAddress: {

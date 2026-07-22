@@ -8,6 +8,7 @@ const {
     updateShipmentStatus,
     getShipment,
     trackShipment,
+    deliveryAttempt,
 } = require("../../controllers/shipping/shippingController");
 const { model } = require("mongoose");
 
@@ -38,6 +39,14 @@ router.get(
 router.get(
     "/track/:trackingNumber",
     trackShipment
+);
+
+
+router.post(
+    "/delivery-attempt/:shipmentId",
+    Protect,
+    seller,
+    deliveryAttempt
 );
 
 module.exports = router;
