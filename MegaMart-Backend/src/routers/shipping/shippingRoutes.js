@@ -9,6 +9,7 @@ const {
     getShipment,
     trackShipment,
     deliveryAttempt,
+    shipmentCancellation
 } = require("../../controllers/shipping/shippingController");
 const { model } = require("mongoose");
 
@@ -44,6 +45,14 @@ router.get(
 
 router.post(
     "/delivery-attempt/:shipmentId",
+    Protect,
+    seller,
+    deliveryAttempt
+);
+
+
+router.patch(
+    "/shipment-cancellation/:shipmentId",
     Protect,
     seller,
     deliveryAttempt

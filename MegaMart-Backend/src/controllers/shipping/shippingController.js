@@ -374,10 +374,91 @@ const deliveryAttempt = asyncHandler(
     }
 );
 
+
+// this is part of Shipment Cancellation api
+const shipmentCancellation = asyncHandler(
+    async (req, res) => {
+
+        const { shipmentId } = req.params;
+        const { reason } = req.body;
+
+        // Validate mongoose ObjectId
+        if (!mongoose.Types.ObjectId.isValid(shipmentId)) {
+            throw new apiErrr(
+                400,
+                "Invalid shipment ID. Please recheck."
+            );
+        }
+
+        // Validate cancellation reason
+        if (!reason || !reason.trim()) {
+            throw new apiErrr(
+                400,
+                "Delivery cancellation reason is required."
+            );
+        }
+
+        // Find shipment
+        const shipment = await Shipping.findById(shipmentId);
+
+        if (!shipment) {
+            throw new apiErrr(
+                404,
+                "Shipment not found."
+            );
+        }
+
+        // Check ownership
+        if (!shipment.seller.equals(req.user._id)) {
+            throw new apiErrr(
+                403,
+                "Unauthorized access."
+            );
+        }
+
+        // Allowed cancellation statuses
+        const cancellableStatuses = [
+            "created",
+            "picked_up",
+        ];
+
+        if (!cancellableStatuses.includes(shipment.status)) {
+            throw new apiErrr(
+                409,
+                "Shipment cannot be cancelled at its current status."
+            );
+        }
+
+        // Update shipment status
+        shipment.status = "cancelled";
+
+        // Cancellation details
+        shipment.cancelledAt = new Date();
+        shipment.cancellationReason = reason.trim();
+
+        // Add timeline entry
+        shipment.timeline.push({
+            status: "cancelled",
+            reason: reason.trim(),
+            updatedAt: new Date(),
+        });
+
+        // Save shipment
+        await shipment.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Shipment cancelled successfully.",
+            shipment,
+        });
+    }
+);
+
 module.exports = {
     createShipping,
     updateShipmentStatus,
     getShipment,
     trackShipment,
     deliveryAttempt,
+    shipmentCancellation,
 }
