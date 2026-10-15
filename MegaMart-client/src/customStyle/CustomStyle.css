@@ -1,0 +1,105 @@
+/* box one  */
+
+.announcement-bar{
+    color: white;
+  height: 2rem;
+  width: 100%;
+  /* border:#14532D solid 2px; */
+  background-color: #064E3B;
+  display: flex;
+  justify-content:space-around;
+}
+
+
+
+.header-hero{
+  height: 4rem;
+  width: 100%;
+  border:#14532D solid 2px;
+  background-color: #FFFFFF;
+}
+
+/* logo ReSize */
+
+    .LogoImg{
+        height: 5rem;
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+    }
+
+.navbar-hero{
+  height: 4rem;
+  width: 100%;
+  border:#14532D solid 2px;
+  background-color: #FFFFFF;
+}
+
+
+.hero-section-hero{
+  height: 20rem;
+  width: 100%;
+  border:#DC2626 solid 2px;
+  background-color: #F8F5EF;
+}
+
+.category-section-hero{
+  height: 10rem;
+  width: 100%;
+  border:#F59E0B solid 2px;
+  background-color: #F8F5EF;
+}
+
+
+.promotional-banners-hero{
+  height: 8rem;
+  width: 100%;
+  border:#D1FAE5 solid 2px;
+  background-color: #FFFFFF;
+}
+
+.feature-product-hero{
+  height: 20rem;
+  width: 100%;
+  border:#F59E0B solid 2px;
+  background-color: #F8F5EF;
+}
+
+.why-hero{
+  height: 8rem;
+  width: 100%;
+  border:#DC2626 solid 2px;
+  background-color: #FFFFFF;
+}
+
+
+.brand-section-hero{
+  height: 5rem;
+  width: 100%;
+  border:#064E3B solid 2px;
+  background-color: #FFFFFF;
+}
+
+.trending-section-hero{
+  height: 8rem;
+  width: 100%;
+  border:#F59E0B solid 2px;
+  background-color: #F8F5EF;
+}
+
+
+    .footer-section-hero{
+          height: 20rem;
+          width: 100%;
+          border:#166534 solid 2px;
+          background-color: #064E3B;
+    }
+
+
+    /* ResideLogo */
+
+    .WhiteLogoImg{
+         height: 6rem;
+        /* width: 5rem; */
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+    }

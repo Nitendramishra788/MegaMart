@@ -1,10 +1,31 @@
+import AnnouncementBar from "./AnnoucementBar/Hero";
+import HeaderHero from "./Header/Hero";
+import NavbarHero from "./Navbar/Hero";
+import HeroSectionHero from "./HeroSection/Hero";
+import CategorySectionHero from "./categorySection/Hero";
+import FeatureProductHero from "./featureProduct/Hero";
+import FooterSectionHero from "./FooterSection/Hero";
+import PromotionalBannersHero from "./PromonalBanners/Hero";
+import TrendingSectionHero from "./TrandingSection/Hero";
+import WhyHero from "./whyShopWithUs/WhyHero";
+import BrandSectionHero from "./BrandSection/Hero";
+
 function HomePage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-100">
-      <h1 className="text-4xl font-bold text-blue-600">
-        MegaMart Home Page 
-      </h1>
-    </main>
+    <div className="home-page">
+      <AnnouncementBar />
+      <HeaderHero />
+      <NavbarHero />
+      <HeroSectionHero />
+      <CategorySectionHero />
+       <PromotionalBannersHero />
+      <FeatureProductHero />
+       <PromotionalBannersHero />
+       <WhyHero/>
+      <BrandSectionHero />
+      <TrendingSectionHero />
+      <FooterSectionHero />
+    </div>
   );
 }
 
