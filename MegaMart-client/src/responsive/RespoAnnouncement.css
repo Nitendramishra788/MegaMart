@@ -1,0 +1,90 @@
+
+/* Announcement bar */
+.announcement-bar {
+    width: 100%;
+    background-color: #064E3B;
+    color: #FFFFFF;
+}
+
+/* Inner layout */
+.announcement-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 16px;
+    padding: 8px 16px;
+}
+
+/* Individual offers */
+.announcement-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+}
+
+/* Extra offers on desktop */
+.announcement-extra {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex: 1;
+    gap: 16px;
+}
+
+/* See more button */
+.announcement-see-more {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    color: #FFFFFF;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .announcement-inner {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .announcement-inner > .announcement-item:first-child {
+        flex: 1;
+        justify-content: flex-start;
+        min-width: 0;
+    }
+
+    .announcement-see-more {
+        display: flex;
+        flex-shrink: 0;
+    }
+
+    .announcement-extra {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-basis: 100%;
+        width: 100%;
+        gap: 0;
+    }
+
+    .announcement-extra.is-open {
+        display: flex;
+    }
+
+    .announcement-extra .announcement-item {
+        justify-content: flex-start;
+        padding: 8px 0;
+        white-space: normal;
+    }
+}

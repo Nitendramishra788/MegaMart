@@ -8,6 +8,8 @@ import "./index.css";
 import store from "./store/store";
 // import CustomStyle from "../src/customStyle/CustomStyle.css";
 import "../src/customStyle/CustomStyle.css";
+import "../src/responsive/RespoAnnouncement.css";
+import "../src/responsive/headRespo.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>

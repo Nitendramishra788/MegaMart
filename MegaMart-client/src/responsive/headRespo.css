@@ -1,0 +1,163 @@
+
+/* ================================
+   HEADER
+================================ */
+
+.header-hero {
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.HeadCom {
+    display: flex;
+    align-items: center;
+}
+
+.HeadCom1 {
+    justify-content: flex-start;
+}
+
+.LogoImg {
+    display: block;
+    width: auto;
+    height: 3.5rem;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* ================================
+   SEARCH
+================================ */
+
+.SearchForm {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 45rem;
+    margin: 0 auto;
+    min-width: 0;
+}
+
+.SearchInput {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 2.75rem;
+    padding: 0 0.875rem;
+    border: 1px solid #D1D5DB;
+    border-right: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    outline: none;
+}
+
+.SearchInput:focus {
+    border-color: #064E3B;
+    box-shadow: 0 0 0 2px rgba(6, 78, 59, 0.1);
+}
+
+.SearchButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3.25rem;
+    min-height: 2.75rem;
+    padding: 0.5rem;
+    color: #FFFFFF;
+    background-color: #064E3B;
+    border: 1px solid #064E3B;
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* ================================
+   HEADER ACTIONS
+================================ */
+
+.HeadCom3,
+.HeadCom4,
+.HeadCom5 {
+    gap: 0.4rem;
+    white-space: nowrap;
+    color: #064E3B;
+    font-size: 0.9rem;
+}
+
+.HeadCom3 i,
+.HeadCom4 i,
+.HeadCom5 i {
+    font-size: 1.2rem;
+}
+
+.UserText {
+    font-size: 0.85rem;
+}
+
+.dropdownArrow {
+    display: flex;
+    align-items: center;
+}
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 991.98px) {
+    .LogoImg {
+        height: 3rem;
+    }
+
+    .HeadCom3,
+    .HeadCom4,
+    .HeadCom5 {
+        gap: 0.3rem;
+    }
+
+    .UserText {
+        display: none;
+    }
+
+    .SearchForm {
+        max-width: none;
+    }
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 575.98px) {
+    .header-hero .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .LogoImg {
+        height: 2.75rem;
+    }
+
+    .header-hero .row {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0.75rem;
+    }
+
+    .header-hero .d-flex.gap-3 {
+        gap: 1rem !important;
+    }
+
+    .HeadCom3 i,
+    .HeadCom4 i,
+    .HeadCom5 i {
+        font-size: 1.15rem;
+    }
+
+    .SearchInput {
+        height: 2.5rem;
+        font-size: 0.875rem;
+    }
+
+    .SearchButton {
+        min-height: 2.5rem;
+        width: 2.75rem;
+    }
+}
