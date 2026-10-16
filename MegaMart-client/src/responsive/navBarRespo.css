@@ -1,0 +1,15 @@
+.categoryBTN{
+    background-color: #064E3B;
+    color: #FFFFFF;
+    height: 2.5rem;
+    width: 10rem;
+    border-radius: 0.5rem;
+}
+
+#navbarLeftDrawerNav li a{
+    color: black;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    margin-left: 1.5rem;
+}
