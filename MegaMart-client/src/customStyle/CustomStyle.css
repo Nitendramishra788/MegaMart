@@ -68,11 +68,17 @@
 }
 
 
-.hero-section-hero{
-  /* height: 20rem;
-  width: 100%; */
-  border:#DC2626 solid 2px;
-  background-color: #F8F5EF;
+.hero-section-hero {
+    width: 100%;
+    background-color: #F8F5EF;
+}
+
+.BannerImgs {
+    display: block;
+    width: 100%;
+    height: clamp(12rem, 35vw, 30rem);
+    object-fit: cover;
+    object-position: center;
 }
 
 .category-section-hero{
