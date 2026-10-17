@@ -11,6 +11,12 @@ import "../src/customStyle/CustomStyle.css";
 import "../src/responsive/RespoAnnouncement.css";
 import "../src/responsive/headRespo.css";
 import "../src/responsive/navBarRespo.css";
+import "../src/responsive/cardRespo.css";
+import "../src/customStyle/cardStyle.css";
+
+
+
+
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>

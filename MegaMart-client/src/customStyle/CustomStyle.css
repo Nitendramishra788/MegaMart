@@ -99,9 +99,19 @@
 .feature-product-hero{
   /* height: 20rem;
   width: 100%; */
-  border:#F59E0B solid 2px;
+  /* border:#F59E0B solid 2px; */
   background-color: #F8F5EF;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
+.feature-product-hero {
+    width: 100%;
+    padding: 24px;
+    background-color: #F8F5EF;
+}
+
 
 .why-hero{
   /* height: 8rem;
