@@ -147,12 +147,80 @@
 }
 
 
-.why-hero{
-  /* height: 8rem;
-  width: 100%; */
-  border:#DC2626 solid 2px;
-  background-color: #FFFFFF;
+
+.why-hero {
+    padding: 2rem 0;
 }
+
+.why-hero h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.whyFeatures {
+    row-gap: 1.5rem;
+}
+
+.whyFeature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+}
+
+.imgBox {
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.whySectionIcon {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.whyText {
+    min-width: 0;
+}
+
+.whyText h3 {
+    font-size: 18px;
+    margin: 0 0 6px;
+}
+
+.whyText p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Laptop: 4 features in one row */
+@media (min-width: 992px) {
+    .why-hero .whyFeatures > div {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+/* Mobile: 1 feature per row */
+@media (max-width: 575.98px) {
+    .why-hero .whyFeatures > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Tablet: 2 features per row */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .why-hero .whyFeatures > div {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+
+
+     
 
 
 .brand-section-hero{
