@@ -89,12 +89,46 @@
 }
 
 
-.promotional-banners-hero{
-  /* height: 8rem;
-  width: 100%; */
-  border:#D1FAE5 solid 2px;
-  background-color: #FFFFFF;
+.promotional-banners-hero {
+    background-color: #FFFFFF;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.promotional-banners-hero .row {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 20px;
+}
+
+.promotionalImg {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.leftPoster,
+.rightPoster {
+    width: 100%;
+}
+
+
+@media (min-width: 992px) {
+    .promotional-banners-hero .row {
+        column-gap: 1rem;
+    }
+
+    .promotional-banners-hero .row > div {
+        width: calc(50% - 0.5rem);
+    }
+}
+
+
 
 .feature-product-hero{
   /* height: 20rem;

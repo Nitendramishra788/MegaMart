@@ -20,7 +20,6 @@ function HomePage() {
       <CategorySectionHero />
        <PromotionalBannersHero />
       <FeatureProductHero />
-       <PromotionalBannersHero />
        <WhyHero/>
       <BrandSectionHero />
       <TrendingSectionHero />
