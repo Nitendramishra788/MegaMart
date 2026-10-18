@@ -13,6 +13,8 @@ import "../src/responsive/headRespo.css";
 import "../src/responsive/navBarRespo.css";
 import "../src/responsive/cardRespo.css";
 import "../src/customStyle/cardStyle.css";
+import "../src/customStyle/caregoryCardStyle.css";
+import "../src/responsive/categoryRespo.css"
 
 
 
