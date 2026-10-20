@@ -18,8 +18,8 @@ function NavbarHero() {
       </div>
       <div class="drawer-body">
         <ul class="navbar-nav me-auto mb-2 md:mb-0" id="navbarLeftDrawerNav">
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Fashion</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/product-listing">Products</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Electronics</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home & Living</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Beauty</a></li>
