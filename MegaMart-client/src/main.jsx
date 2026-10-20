@@ -15,6 +15,9 @@ import "../src/responsive/cardRespo.css";
 import "../src/customStyle/cardStyle.css";
 import "../src/customStyle/caregoryCardStyle.css";
 import "../src/responsive/categoryRespo.css"
+import "../src/customStyle/trandingCard.css";
+
+import "../src/responsive/trandingRespo.css";
 
 
 

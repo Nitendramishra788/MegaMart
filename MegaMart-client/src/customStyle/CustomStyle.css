@@ -233,7 +233,7 @@
 .trending-section-hero{
   /* height: 8rem;
   width: 100%; */
-  border:#F59E0B solid 2px;
+  /* border:#F59E0B solid 2px; */
   background-color: #F8F5EF;
 }
 
@@ -254,3 +254,4 @@
         margin-left: 0.2rem;
         margin-right: 0.2rem;
     }
+
