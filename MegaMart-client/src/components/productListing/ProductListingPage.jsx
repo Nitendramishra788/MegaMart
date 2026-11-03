@@ -11,7 +11,6 @@ function ProductListingPage(){
         <AnnouncementBar/>
         <HeaderHero/>
         <NavbarHero/>
-        <ProductListHead/>
         <ProductHero/>
         <Footer/>
         </>

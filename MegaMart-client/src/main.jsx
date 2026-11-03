@@ -28,6 +28,9 @@ import "../src/responsive/categoryRespo.css"
 import "../src/responsive/trandingRespo.css";
 import "../src/responsive/footerRespo.css"
 
+// this is part of productList css importing
+import "../src/components/productListing/productListStyle/productListStyle.css";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
