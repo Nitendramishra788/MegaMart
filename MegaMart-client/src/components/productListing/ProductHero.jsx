@@ -71,10 +71,13 @@ function ProductHero() {
                     <div className="col-8">
 
                         <div className="mainProductListCon">
+                    
+                           
+
                             <ProductListCard
-                                image="phone.png"
-                                title="Men Casual Shirt"
-                                price={799}
+                                image="ROG Strix G16 Gaming Laptop1.jpg"
+                                title="ASUS ROG Strix G16 Gaming Laptop"
+                                price={124999}
                                 originalPrice={1299}
                                 discount={38}
                                 rating={4.5}
@@ -104,7 +107,18 @@ function ProductHero() {
 
                             />
 
-                            <ProductListCard
+                             <ProductListCard
+                                image="phone.png"
+                                title="Men Casual Shirt"
+                                price={799}
+                                originalPrice={1299}
+                                discount={38}
+                                rating={4.5}
+                                reviews={120}
+
+                            />
+
+                             <ProductListCard
                                 image="phone.png"
                                 title="Men Casual Shirt"
                                 price={799}

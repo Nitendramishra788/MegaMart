@@ -1,0 +1,99 @@
+/* Main Container */
+.productFeatures {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Feature Card */
+.productFeatureCard {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.productFeatureCard:hover {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+/* Feature Icon */
+.featureIcon {
+    min-width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dcfce7;
+    color: #15803d;
+    border-radius: 50%;
+}
+
+.featureIcon i {
+    font-size: 1.2rem;
+}
+
+/* Feature Content */
+.featureContent {
+    min-width: 0;
+}
+
+.featureContent h4 {
+    margin: 0 0 0.3rem;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.featureContent p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .productFeatures {
+        gap: 0.8rem;
+    }
+
+    .productFeatureCard {
+        padding: 0.85rem;
+        gap: 0.7rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .productFeatures {
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+        margin: 1.2rem 0;
+    }
+
+    .productFeatureCard {
+        padding: 0.85rem;
+    }
+
+    .featureIcon {
+        min-width: 38px;
+        height: 38px;
+    }
+
+    .featureContent h4 {
+        font-size: 0.85rem;
+    }
+
+    .featureContent p {
+        font-size: 0.75rem;
+    }
+}

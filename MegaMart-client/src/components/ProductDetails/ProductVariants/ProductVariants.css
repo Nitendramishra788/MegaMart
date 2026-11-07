@@ -1,0 +1,134 @@
+/* Main Container */
+.productVariants {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+/* Variant Section */
+.variantSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Heading */
+.variantHeading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.variantHeading h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
+.variantHeading span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+/* Color Options */
+.colorOptions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.colorOption {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #e2e8f0;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.colorOption:hover {
+    transform: scale(1.08);
+    border-color: #16a34a;
+}
+
+.colorOption.selectedColor {
+    border: 2px solid #16a34a;
+    outline: 2px solid #16a34a;
+    outline-offset: 3px;
+}
+
+/* Variant Options */
+.variantOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+
+.variantOption {
+    padding: 0.7rem 1rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.variantOption:hover {
+    border-color: #16a34a;
+    color: #15803d;
+}
+
+.variantOption.activeVariant {
+    background: #f0fdf4;
+    border: 1px solid #16a34a;
+    color: #15803d;
+    font-weight: 600;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .productVariants {
+        gap: 1.3rem;
+    }
+
+    .variantOption {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.82rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .productVariants {
+        gap: 1.2rem;
+        margin: 1.2rem 0;
+    }
+
+    .variantHeading h4 {
+        font-size: 0.9rem;
+    }
+
+    .colorOption {
+        width: 32px;
+        height: 32px;
+    }
+
+    .variantOptions {
+        gap: 0.6rem;
+    }
+
+    .variantOption {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.78rem;
+    }
+}

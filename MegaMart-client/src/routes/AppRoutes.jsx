@@ -12,6 +12,7 @@ import ProfilePage from "../features/profile/pages/ProfilePage";
 import CartPage from "../features/cart/pages/CartPage";
 import NotFoundPage from "../features/home/pages/NotFoundPage";
 import ProductListingPage from "../components/productListing/ProductListingPage";
+import ProductDetailsPage from "../features/ProductDetails/ProductDetails"
 
 function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ function AppRoutes() {
       <Route element={<PublicRoute />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/product-listing" element={<ProductListingPage/>}/>
+        <Route path="/product-details" element={<ProductDetailsPage/>}/>
       </Route>
 
       {/* Guest Routes */}

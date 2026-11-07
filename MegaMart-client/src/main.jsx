@@ -31,6 +31,15 @@ import "../src/responsive/footerRespo.css"
 // this is part of productList css importing
 import "../src/components/productListing/productListStyle/productListStyle.css";
 
+// this is part of productDetails css importing
+import "../src/components/ProductDetails/ProductGallery/ProductGallery.css";
+import "../src/components/ProductDetails/ProductInfo/ProductInfo.css";
+import "../src/components/ProductDetails/ProductVariants/ProductVariants.css";
+import "../src/components/ProductDetails/QuantitySelector/QuantitySelector.css";
+import "../src/features/ProductDetails/ProductDetails.css";
+import "../src/components/ProductDetails/ProductActions/ProductActions.css";
+import "../src/components/ProductDetails/ProductTabs/ProductTabs.css";
+import "../src/components/ProductDetails/ProductDescription/ProductDescription.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>

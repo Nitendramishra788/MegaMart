@@ -3,15 +3,15 @@ import Button from "../../../../components/common/Button";
 
 function NavbarHero() {
     return (
-        <div className="navbar-hero">
+        <div className="navbar-hero" >
             {/* <h1>Navbar</h1> */}
-            <nav class="navbar md:navbar-expand bg-1 fg-2">
+            <nav class="navbar md:navbar-expand bg-white fg-2" id="navbar-hero">
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><button className="categoryBTN">All Categories</button></a>
     <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarLeftDrawer" aria-controls="navbarLeftDrawer" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon" aria-hidden="true"></span>
     </button>
-    <dialog class="drawer drawer-start" tabindex="-1" id="navbarLeftDrawer" aria-labelledby="navbarLeftDrawerLabel">
+    <dialog class="drawer drawer-start bg-white" tabindex="-1" id="navbarLeftDrawer" aria-labelledby="navbarLeftDrawerLabel">
       <div class="drawer-header">
         {/* <h5 class="drawer-title" id="navbarLeftDrawerLabel">Menu</h5> */}
         <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Close"></button>

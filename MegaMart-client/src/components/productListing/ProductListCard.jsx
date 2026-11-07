@@ -13,7 +13,8 @@ const ProductCard = ({
     <div className="product-card">
       <img src={image} alt={title} />
 
-      <h3>{title}</h3>
+      
+      <a href="/product-details"><h3>{title}</h3></a>
 
       <div className="product-price">
         <span>₹{price}</span>

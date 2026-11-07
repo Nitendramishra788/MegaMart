@@ -1,0 +1,201 @@
+/* Main Gallery */
+.productGallery {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+/* Thumbnail List */
+.productThumbnailList {
+    width: 75px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.productThumbnail {
+    width: 75px;
+    height: 75px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.productThumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.productThumbnail:hover {
+    border-color: #059669;
+}
+
+.productThumbnail.activeThumbnail {
+    border: 2px solid #059669;
+    background: #f0fdf4;
+}
+
+/* Main Image */
+.productMainImage {
+    width: 100%;
+    min-width: 0;
+    height: 430px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.mainProductImg {
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.productMainImage:hover .mainProductImg {
+    transform: scale(1.04);
+}
+
+/* Zoom Button */
+.productZoomBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.productZoomBtn:hover {
+    background: #064e3b;
+    color: #ffffff;
+}
+
+/* Zoom Overlay */
+.productZoomOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background: rgba(15, 23, 42, 0.9);
+    cursor: zoom-out;
+}
+
+.productZoomOverlay img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: default;
+}
+
+.productZoomClose {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    font-size: 38px;
+    cursor: pointer;
+}
+
+/* Empty State */
+.productGalleryEmpty {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    color: #64748b;
+    border-radius: 12px;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .productMainImage {
+        height: 360px;
+    }
+
+    .productThumbnailList {
+        width: 65px;
+    }
+
+    .productThumbnail {
+        width: 65px;
+        height: 65px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .productGallery {
+        flex-direction: column-reverse;
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .productMainImage {
+        height: 300px;
+    }
+
+    .productThumbnailList {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .productThumbnail {
+        width: 65px;
+        height: 65px;
+        flex-shrink: 0;
+    }
+
+    .mainProductImg {
+        padding: 15px;
+    }
+
+    .productZoomOverlay {
+        padding: 15px;
+    }
+
+    .productZoomOverlay img {
+        max-width: 100%;
+        max-height: 80%;
+    }
+}

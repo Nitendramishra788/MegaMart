@@ -1,0 +1,103 @@
+/* Main Container */
+.quantitySelector {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Heading */
+.quantityHeading {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
+/* Quantity Controls */
+.quantityControls {
+    display: flex;
+    align-items: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* Buttons */
+.quantityBtn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quantityBtn:hover:not(:disabled) {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.quantityBtn:disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* Quantity Value */
+.quantityValue {
+    min-width: 45px;
+    padding: 0 0.5rem;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+}
+
+/* Stock Information */
+.quantityStock {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .quantitySelector {
+        gap: 0.8rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .quantitySelector {
+        gap: 0.7rem;
+        margin: 1.2rem 0;
+    }
+
+    .quantityHeading {
+        font-size: 0.9rem;
+    }
+
+    .quantityBtn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .quantityValue {
+        min-width: 40px;
+        font-size: 0.9rem;
+    }
+
+    .quantityStock {
+        font-size: 0.75rem;
+    }
+}

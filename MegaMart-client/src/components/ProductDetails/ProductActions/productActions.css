@@ -1,0 +1,90 @@
+/* Main Container */
+.productActions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Common Button Styling */
+.productActions button {
+    flex: 1;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Add to Cart Button */
+.addToCartBtn {
+    background: #ffffff;
+    color: #047857;
+    border: 1px solid #047857;
+}
+
+.addToCartBtn:hover:not(:disabled) {
+    background: #ecfdf5;
+    border-color: #065f46;
+    color: #065f46;
+}
+
+/* Buy Now Button */
+.buyNowBtn {
+    background: #047857;
+    color: #ffffff;
+    border: 1px solid #047857;
+}
+
+.buyNowBtn:hover:not(:disabled) {
+    background: #065f46;
+    border-color: #065f46;
+}
+
+/* Button Icons */
+.productActions button i {
+    font-size: 1.1rem;
+}
+
+/* Disabled State */
+.productActions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+    .productActions {
+        gap: 0.8rem;
+    }
+
+    .productActions button {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .productActions {
+        gap: 0.7rem;
+        margin: 1.2rem 0;
+    }
+
+    .productActions button {
+        min-height: 44px;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.82rem;
+    }
+
+    .productActions button i {
+        font-size: 1rem;
+    }
+}
