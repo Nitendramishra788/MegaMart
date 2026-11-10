@@ -1,0 +1,349 @@
+
+/* Main Register Page */
+.registerPage {
+    width: 100%;
+    min-height: 650px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background: #f0fdf4;
+}
+
+.registerContainer {
+    width: 100%;
+    max-width: 1150px;
+    min-height: 620px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+}
+
+/* Left Banner */
+.registerBanner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3.5rem;
+    background: #15803d;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.registerBanner > h3 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #dcfce7;
+}
+
+.registerBanner > h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.registerBenefits {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.registerBenefits p {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #f0fdf4;
+}
+
+.registerBenefits svg {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+}
+
+.registerBannerImage {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* Register Form Section */
+.registerFormSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.registerFormHeading {
+    margin-bottom: 1.8rem;
+}
+
+.registerFormHeading h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.7rem;
+    font-weight: 750;
+    color: #0f172a;
+}
+
+.registerFormHeading p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Form */
+.registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Input Fields */
+.registerInputGroup {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+.registerInputGroup:focus-within {
+    border-color: #15803d;
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
+}
+
+.registerInputGroup > svg {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    color: #64748b;
+}
+
+.registerInputGroup input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #0f172a;
+}
+
+.registerInputGroup input::placeholder {
+    color: #94a3b8;
+}
+
+/* Password Toggle */
+.registerPasswordToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.registerPasswordToggle svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* Terms */
+.registerTerms {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.registerTerms input {
+    accent-color: #15803d;
+}
+
+/* Submit Button */
+.registerSubmitBtn {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.3rem;
+    border: none;
+    border-radius: 9px;
+    background: #15803d;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.registerSubmitBtn:hover {
+    background: #166534;
+}
+
+.registerSubmitBtn svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* Divider */
+.registerDivider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.registerDivider::before,
+.registerDivider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* Social Login */
+.registerSocialLogin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+}
+
+.registerSocialLogin button {
+    padding: 0.75rem 0.4rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.registerSocialLogin button:hover {
+    background: #f8fafc;
+    border-color: #15803d;
+}
+
+/* Login Redirect */
+.registerLoginRedirect {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.registerLoginRedirect a {
+    color: #15803d;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .registerPage {
+        padding: 2rem 1.5rem;
+    }
+
+    .registerBanner {
+        padding: 2rem;
+    }
+
+    .registerBanner > h1 {
+        font-size: 2rem;
+    }
+
+    .registerFormSection {
+        padding: 2rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .registerPage {
+        padding: 1.5rem 1rem;
+    }
+
+    .registerContainer {
+        max-width: 500px;
+        grid-template-columns: 1fr;
+    }
+
+    .registerBanner {
+        padding: 2rem;
+    }
+
+    .registerBanner > h1 {
+        font-size: 1.8rem;
+    }
+
+    .registerBannerImage {
+        display: none;
+    }
+
+    .registerFormSection {
+        padding: 2rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .registerPage {
+        padding: 1rem 0.7rem;
+    }
+
+    .registerBanner {
+        padding: 1.5rem;
+    }
+
+    .registerBanner > h1 {
+        font-size: 1.5rem;
+    }
+
+    .registerBenefits {
+        gap: 0.7rem;
+        margin-top: 1.3rem;
+    }
+
+    .registerBenefits p {
+        font-size: 0.82rem;
+    }
+
+    .registerFormSection {
+        padding: 1.5rem 1rem;
+    }
+
+    .registerFormHeading h2 {
+        font-size: 1.4rem;
+    }
+
+    .registerSocialLogin {
+        gap: 0.4rem;
+    }
+
+    .registerSocialLogin button {
+        font-size: 0.75rem;
+    }
+}

@@ -54,6 +54,11 @@ import "../src/features/WishlistPage/WishlistPage.css";
 import "../src/components/WishlistPage/WishlistHeader/WishlistHeader.css";
 import "../src/components/WishlistPage/WishlistProductCard/WishlistProductCard.css";
 
+
+// this is part of AuthenticationPage css importing
+import "../src/features/auth/pages/LoginPage.css";
+import "../src/features/auth/pages/RegisterPage.css";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>

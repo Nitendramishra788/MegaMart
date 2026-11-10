@@ -25,7 +25,7 @@ function HeaderHero() {
 
                             <div className="HeadCom HeadCom3">
                                 <i className="fa-solid fa-circle-user"></i>
-                                <span className="UserText">Account</span>
+                                <span className="UserText"><a href="/login">Account</a></span>
                                 <span className="dropdownArrow">
                                     <i className="fa-solid fa-caret-down"></i>
                                 </span>
@@ -34,7 +34,7 @@ function HeaderHero() {
                             <div className="HeadCom HeadCom4">
                                 <i className="fa-regular fa-heart"></i>
                                 <a href="/wishlist">
-                                    <span className="UserText">Wishlist</span>
+                                <span className="UserText">Wishlist</span>
                                 </a>
                             </div>
 
