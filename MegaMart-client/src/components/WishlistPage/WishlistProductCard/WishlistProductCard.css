@@ -1,0 +1,229 @@
+.wishlistProductCard {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* Product Image */
+.wishlistProductImage {
+    width: 180px;
+    height: 180px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wishlistProductImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Product Information */
+.wishlistProductInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.wishlistProductInfo h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.wishlistProductVariant {
+    margin: 0 0 0.7rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Rating */
+.wishlistProductRating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+/* Price */
+.wishlistProductPrice {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: 0.8rem;
+}
+
+.wishlistSellingPrice {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.wishlistOriginalPrice {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+.wishlistDiscount {
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Delivery */
+.wishlistDelivery {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #15803d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Product Actions */
+.wishlistProductActions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 160px;
+    flex-shrink: 0;
+}
+
+.wishlistAddCartBtn,
+.wishlistRemoveBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wishlistAddCartBtn {
+    border: 1px solid #15803d;
+    background: #15803d;
+    color: #ffffff;
+}
+
+.wishlistAddCartBtn:hover {
+    background: #166534;
+    border-color: #166534;
+}
+
+.wishlistRemoveBtn {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #dc2626;
+}
+
+.wishlistRemoveBtn:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .wishlistProductCard {
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .wishlistProductImage {
+        width: 140px;
+        height: 150px;
+    }
+
+    .wishlistProductActions {
+        width: 140px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .wishlistProductCard {
+        gap: 0.75rem;
+        padding: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .wishlistProductImage {
+        width: 105px;
+        height: 120px;
+    }
+
+    .wishlistProductInfo h3 {
+        font-size: 0.95rem;
+    }
+
+    .wishlistProductVariant {
+        font-size: 0.78rem;
+    }
+
+    .wishlistProductRating {
+        font-size: 0.78rem;
+        gap: 0.25rem;
+    }
+
+    .wishlistProductRating svg {
+        width: 14px;
+    }
+
+    .wishlistSellingPrice {
+        font-size: 1.05rem;
+    }
+
+    .wishlistOriginalPrice {
+        font-size: 0.8rem;
+    }
+
+    .wishlistDiscount {
+        font-size: 0.7rem;
+    }
+
+    .wishlistDelivery {
+        font-size: 0.8rem;
+    }
+
+    .wishlistProductActions {
+        width: 100%;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .wishlistAddCartBtn,
+    .wishlistRemoveBtn {
+        padding: 0.65rem 0.3rem;
+        font-size: 0.8rem;
+    }
+
+    .wishlistAddCartBtn svg,
+    .wishlistRemoveBtn svg {
+        width: 16px;
+    }
+}

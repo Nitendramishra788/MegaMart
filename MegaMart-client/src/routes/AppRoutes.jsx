@@ -13,6 +13,7 @@ import CartPage from "../features/cart/pages/CartPage";
 import NotFoundPage from "../features/home/pages/NotFoundPage";
 import ProductListingPage from "../components/productListing/ProductListingPage";
 import ProductDetailsPage from "../features/ProductDetails/ProductDetails";
+import WishlistPage from "../features/WishlistPage/WishlistPage";
 
 
 function AppRoutes() {
@@ -24,6 +25,7 @@ function AppRoutes() {
         <Route path="/product-listing" element={<ProductListingPage/>}/>
         <Route path="/product-details" element={<ProductDetailsPage/>}/>
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
       </Route>
 
       {/* Guest Routes */}

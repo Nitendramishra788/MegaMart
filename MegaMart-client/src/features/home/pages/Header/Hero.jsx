@@ -33,7 +33,9 @@ function HeaderHero() {
 
                             <div className="HeadCom HeadCom4">
                                 <i className="fa-regular fa-heart"></i>
-                                <span className="UserText">Wishlist</span>
+                                <a href="/wishlist">
+                                    <span className="UserText">Wishlist</span>
+                                </a>
                             </div>
 
                             <div className="HeadCom HeadCom5">

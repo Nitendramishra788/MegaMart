@@ -48,6 +48,12 @@ import "../src/components/CartPage/CartProductCard/CartProductCard.css";
 import "../src/components/CartPage/PriceDetails/PriceDetails.css";
 import "../src/components/CartPage/CheckoutSection/CheckoutSection.css";
 
+
+// this is part of wishlistPage css importing
+import "../src/features/WishlistPage/WishlistPage.css";
+import "../src/components/WishlistPage/WishlistHeader/WishlistHeader.css";
+import "../src/components/WishlistPage/WishlistProductCard/WishlistProductCard.css";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>
