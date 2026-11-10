@@ -12,7 +12,8 @@ import ProfilePage from "../features/profile/pages/ProfilePage";
 import CartPage from "../features/cart/pages/CartPage";
 import NotFoundPage from "../features/home/pages/NotFoundPage";
 import ProductListingPage from "../components/productListing/ProductListingPage";
-import ProductDetailsPage from "../features/ProductDetails/ProductDetails"
+import ProductDetailsPage from "../features/ProductDetails/ProductDetails";
+
 
 function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/product-listing" element={<ProductListingPage/>}/>
         <Route path="/product-details" element={<ProductDetailsPage/>}/>
+        <Route path="/cart" element={<CartPage />} />
       </Route>
 
       {/* Guest Routes */}
@@ -33,7 +35,7 @@ function AppRoutes() {
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/cart" element={<CartPage />} />
+        {/* <Route path="/cart" element={<CartPage />} /> */}
       </Route>
 
       {/* Not Found Route */}

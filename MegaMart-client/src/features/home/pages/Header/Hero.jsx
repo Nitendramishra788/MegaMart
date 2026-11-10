@@ -37,8 +37,10 @@ function HeaderHero() {
                             </div>
 
                             <div className="HeadCom HeadCom5">
+                                <a href="/cart">   
                                 <i className="fa-solid fa-cart-shopping"></i>
                                 <span className="UserText">Cart</span>
+                                </a>
                             </div>
 
                         </div>

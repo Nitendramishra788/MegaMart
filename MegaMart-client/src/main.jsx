@@ -41,6 +41,13 @@ import "../src/components/ProductDetails/ProductActions/ProductActions.css";
 import "../src/components/ProductDetails/ProductTabs/ProductTabs.css";
 import "../src/components/ProductDetails/ProductDescription/ProductDescription.css";
 
+// this is part of cartPage css importing
+import "../src/features/cart/pages/CartPage.css";
+import "../src/components/CartPage/CartHeader.css";
+import "../src/components/CartPage/CartProductCard/CartProductCard.css";
+import "../src/components/CartPage/PriceDetails/PriceDetails.css";
+import "../src/components/CartPage/CheckoutSection/CheckoutSection.css";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>

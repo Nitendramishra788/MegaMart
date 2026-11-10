@@ -1,0 +1,84 @@
+.checkoutSection {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* Checkout Button */
+.checkoutBtn {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    background: #15803d;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.checkoutBtn:hover {
+    background: #166534;
+}
+
+/* Secure Checkout */
+.secureCheckout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    color: #15803d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Payment Security */
+.paymentSecurity {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+.paymentSecurity svg {
+    flex-shrink: 0;
+    color: #15803d;
+}
+
+.paymentSecurity p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .checkoutSection {
+        padding: 1rem;
+    }
+
+    .checkoutBtn {
+        padding: 0.85rem;
+        font-size: 0.95rem;
+    }
+
+    .secureCheckout {
+        font-size: 0.85rem;
+    }
+
+    .paymentSecurity p {
+        font-size: 0.8rem;
+    }
+}

@@ -1,0 +1,49 @@
+.priceDetails {
+    width: 100%;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.priceDetails h3 {
+    margin: 0 0 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.priceRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+.discountPrice {
+    color: #15803d;
+    font-weight: 600;
+}
+
+.priceDivider {
+    width: 100%;
+    border-top: 1px dashed #cbd5e1;
+    margin: 1.2rem 0;
+}
+
+.totalPriceRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.totalPriceRow span:last-child {
+    color: #15803d;
+    font-size: 1.3rem;
+}
