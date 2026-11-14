@@ -1,0 +1,64 @@
+.orderSummary {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.orderSummaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.orderSummaryHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.orderSummaryHeader span {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.orderSummaryItems {
+  width: 100%;
+  padding-top: 1rem;
+}
+
+
+/* this is part of price style */
+
+.orderPriceBreakdown {
+  padding-top: 1.25rem;
+}
+
+.orderPriceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.freeShipping {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.orderTotalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+  color: #0f172a;
+  font-size: 1.05rem;
+}

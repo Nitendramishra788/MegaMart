@@ -1,0 +1,131 @@
+.paymentMethod {
+    width: 100%;
+    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* Header */
+
+.paymentMethodHeader {
+    margin-bottom: 22px;
+}
+
+.paymentMethodHeader h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #17212b;
+}
+
+.paymentMethodHeader p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* Payment List */
+
+.paymentMethodList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Payment Option */
+
+.paymentOption {
+    width: 100%;
+    padding: 17px;
+    border: 1px solid #dce3e8;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.paymentOption:hover {
+    border-color: #07843f;
+}
+
+.paymentOption.selectedPayment {
+    border: 2px solid #07843f;
+    background: #f5fbf7;
+}
+
+/* Left Content */
+
+.paymentOptionLeft {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.paymentOptionLeft input {
+    width: 17px;
+    height: 17px;
+    accent-color: #07843f;
+    cursor: pointer;
+}
+
+.paymentOptionIcon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 23px;
+}
+
+.paymentOptionDetails h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 650;
+    color: #17212b;
+}
+
+.paymentOptionDetails p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Responsive */
+
+@media (max-width: 576px) {
+
+    .paymentMethod {
+        padding: 17px;
+    }
+
+    .paymentMethodHeader h2 {
+        font-size: 20px;
+    }
+
+    .paymentOption {
+        padding: 13px;
+    }
+
+    .paymentOptionLeft {
+        gap: 10px;
+    }
+
+    .paymentOptionIcon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 20px;
+    }
+
+    .paymentOptionDetails h3 {
+        font-size: 14px;
+    }
+
+    .paymentOptionDetails p {
+        font-size: 12px;
+    }
+
+}

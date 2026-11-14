@@ -1,0 +1,80 @@
+.shippingAddress {
+    width: 100%;
+    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+/* Header */
+
+.shippingAddressHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.shippingAddressHeader h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #17212b;
+}
+
+.shippingAddressHeader p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* Add Address Button */
+
+.addAddressBtn {
+    padding: 10px 16px;
+    border: 1px solid #07843f;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #07843f;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.addAddressBtn:hover {
+    background: #07843f;
+    color: #ffffff;
+}
+
+/* Address List */
+
+.shippingAddressList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Responsive */
+
+@media (max-width: 576px) {
+
+    .shippingAddress {
+        padding: 17px;
+    }
+
+    .shippingAddressHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .shippingAddressHeader h2 {
+        font-size: 20px;
+    }
+
+    .addAddressBtn {
+        width: 100%;
+    }
+
+}

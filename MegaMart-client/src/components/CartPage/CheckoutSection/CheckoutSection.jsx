@@ -9,7 +9,7 @@ function CheckoutSection({ onCheckout }) {
                 className="checkoutBtn"
                 onClick={onCheckout}
             >
-                Proceed to Checkout
+                <a href="/checkout">Proceed to Checkout</a>
             </button>
 
             <div className="secureCheckout">

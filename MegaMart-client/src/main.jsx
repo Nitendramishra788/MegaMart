@@ -59,6 +59,17 @@ import "../src/components/WishlistPage/WishlistProductCard/WishlistProductCard.c
 import "../src/features/auth/pages/LoginPage.css";
 import "../src/features/auth/pages/RegisterPage.css";
 
+// this is part of checkoutPage css importing
+import "../src/features/CheckoutPage/CheckoutPage.css";
+import "../src/components/Checkout/CheckoutHeader/CheckoutHeader.css"
+import "../src/components/Checkout/ShippingAddress/AddressCard.css";
+import "../src/components/Checkout/ShippingAddress/ShippingAddress.css";
+import "../src/components/Checkout/PaymentMethod/PaymentMethod.css";
+import "../src/components/Checkout/CardDetails/CardDetails.css"
+import "../src/components/Checkout/OrderSummary/OrderSummary.css"
+import "../src/components/Checkout/OrderSummary/OrderItem.css"
+import "../src/components/Checkout/CheckoutActions/CheckoutActions.css";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
    <React.StrictMode>
      <Provider store={store}>

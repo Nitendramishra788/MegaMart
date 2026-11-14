@@ -14,6 +14,7 @@ import NotFoundPage from "../features/home/pages/NotFoundPage";
 import ProductListingPage from "../components/productListing/ProductListingPage";
 import ProductDetailsPage from "../features/ProductDetails/ProductDetails";
 import WishlistPage from "../features/WishlistPage/WishlistPage";
+import CheckoutPage from "../features/CheckoutPage/CheckoutPage";
 
 
 function AppRoutes() {
@@ -26,6 +27,7 @@ function AppRoutes() {
         <Route path="/product-details" element={<ProductDetailsPage/>}/>
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Route>
 
       {/* Guest Routes */}

@@ -1,0 +1,126 @@
+.addressCard {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #dce3e8;
+    border-radius: 9px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.addressCard:hover {
+    border-color: #07843f;
+}
+
+.addressCard.selectedAddress {
+    border: 2px solid #07843f;
+    background: #f5fbf7;
+}
+
+/* Content */
+
+.addressCardContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+}
+
+.addressCardContent input {
+    width: 17px;
+    height: 17px;
+    margin-top: 4px;
+    accent-color: #07843f;
+    cursor: pointer;
+}
+
+.addressDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.addressCardTop {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.addressCardTop h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #17212b;
+}
+
+.addressType {
+    padding: 4px 10px;
+    background: #e9efff;
+    color: #3156a3;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.defaultBadge {
+    padding: 4px 10px;
+    background: #dcfce7;
+    color: #07843f;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.addressDetails p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #475569;
+}
+
+.addressDetails .addressPhone {
+    color: #17212b;
+    font-weight: 500;
+}
+
+/* Edit Button */
+
+.editAddressBtn {
+    border: none;
+    background: transparent;
+    color: #07843f;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Responsive */
+
+@media (max-width: 576px) {
+
+    .addressCard {
+        padding: 14px;
+        gap: 8px;
+    }
+
+    .addressCardTop {
+        gap: 7px;
+    }
+
+    .addressCardTop h3 {
+        font-size: 15px;
+    }
+
+    .addressDetails p {
+        font-size: 13px;
+    }
+
+    .editAddressBtn {
+        font-size: 13px;
+    }
+
+}

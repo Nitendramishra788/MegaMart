@@ -1,0 +1,159 @@
+.checkoutHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 25px 15px;
+}
+
+/* Left Section */
+
+.checkoutHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.checkoutCheckIcon {
+    height: 60px;
+    width: 60px;
+    min-width: 60px;
+    border-radius: 50%;
+    background: #07843f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.checkoutHeading h1 {
+    font-size: 34px;
+    font-weight: 750;
+    color: #17212b;
+    margin: 0;
+}
+
+.checkoutHeading p {
+    font-size: 18px;
+    color: #475569;
+    margin: 3px 0 0;
+}
+
+/* Right Section */
+
+.checkoutSteps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.checkoutStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 65px;
+}
+
+.checkoutStepCircle {
+    height: 34px;
+    width: 34px;
+    border: 2px solid #a3adb5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.checkoutStepCircle.active {
+    background: #07843f;
+    border-color: #07843f;
+    color: white;
+}
+
+.checkoutStepTitle {
+    font-size: 15px;
+    color: #475569;
+    white-space: nowrap;
+}
+
+.checkoutStepTitle.activeText {
+    color: #075c30;
+    font-weight: 600;
+}
+
+.checkoutStepLine {
+    width: 85px;
+    height: 2px;
+    background: #a3adb5;
+    margin-top: 16px;
+}
+
+.checkoutStepLine.activeLine {
+    background: #07843f;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+    .checkoutHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 10px;
+        gap: 25px;
+    }
+
+    .checkoutHeaderLeft {
+        gap: 12px;
+    }
+
+    .checkoutCheckIcon {
+        height: 48px;
+        width: 48px;
+        min-width: 48px;
+        font-size: 30px;
+    }
+
+    .checkoutHeading h1 {
+        font-size: 27px;
+    }
+
+    .checkoutHeading p {
+        font-size: 14px;
+    }
+
+    .checkoutSteps {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .checkoutStepLine {
+        width: 55px;
+    }
+
+    .checkoutStepTitle {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .checkoutStepLine {
+        width: 35px;
+    }
+
+    .checkoutStep {
+        min-width: 60px;
+    }
+
+    .checkoutStepTitle {
+        font-size: 12px;
+    }
+}

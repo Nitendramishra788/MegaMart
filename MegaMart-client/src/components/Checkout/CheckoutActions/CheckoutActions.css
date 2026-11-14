@@ -1,0 +1,39 @@
+.checkoutActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.backToCartBTN,
+.placeOrderBTN {
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.backToCartBTN {
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.backToCartBTN:hover {
+  background-color: #f1f5f9;
+}
+
+.placeOrderBTN {
+  color: #ffffff;
+  background-color: #047857;
+  border: 1px solid #047857;
+}
+
+.placeOrderBTN:hover {
+  background-color: #065f46;
+}
